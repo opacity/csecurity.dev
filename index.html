@@ -22,6 +22,13 @@
             justify-content: center;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            padding: 0;
+            margin: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            scroll-behavior: smooth;
+        }
+
+        body > * {
             padding: 2rem;
         }
 
@@ -30,20 +37,25 @@
             width: 100%;
             text-align: center;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: auto;
+        }
+
+        body:has(.container.side-layout) {
+            align-items: flex-start;
+            padding-top: 2rem;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .container.side-layout {
-            max-width: 1400px;
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 4rem;
-            text-align: left;
-            align-items: start;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            text-align: center;
         }
 
         .container.side-layout .header-section {
-            position: sticky;
-            top: 2rem;
+            /* Header stays on top */
         }
 
         /* Animated background orbs */
@@ -52,7 +64,6 @@
             border-radius: 50%;
             filter: blur(100px);
             opacity: 0.3;
-            animation: float 20s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
         }
@@ -63,6 +74,7 @@
             background: rgba(70, 130, 255, 0.4);
             top: -10%;
             left: -10%;
+            animation: floatSlow1 60s ease-in-out infinite;
         }
 
         .orb-2 {
@@ -71,15 +83,36 @@
             background: rgba(100, 150, 255, 0.3);
             bottom: -10%;
             right: -10%;
-            animation-delay: 10s;
+            animation: floatSlow2 80s ease-in-out infinite;
         }
 
-        @keyframes float {
+        @keyframes floatSlow1 {
             0%, 100% {
-                transform: translate(0, 0) scale(1);
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(100px, -80px);
             }
             50% {
-                transform: translate(50px, -50px) scale(1.1);
+                transform: translate(50px, 100px);
+            }
+            75% {
+                transform: translate(-80px, 50px);
+            }
+        }
+
+        @keyframes floatSlow2 {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(-100px, 80px);
+            }
+            50% {
+                transform: translate(-50px, -100px);
+            }
+            75% {
+                transform: translate(80px, -50px);
             }
         }
 
@@ -88,6 +121,19 @@
             position: relative;
             z-index: 1;
             animation: fadeIn 1s ease-out;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* When no tab is active, center everything */
+        body:not(:has(.container.side-layout)) .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-section {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes fadeIn {
@@ -103,7 +149,7 @@
 
         /* Logo */
         .logo {
-            font-size: clamp(3rem, 8vw, 5rem);
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
             font-weight: 700;
             letter-spacing: -0.03em;
             margin-bottom: 1rem;
@@ -111,11 +157,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            transition: font-size 0.6s ease;
-        }
-
-        .container.side-layout .logo {
-            font-size: 2.5rem;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .tagline {
@@ -123,6 +165,7 @@
             color: rgba(255, 255, 255, 0.5);
             margin-bottom: 3rem;
             font-weight: 400;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Status badge */
@@ -137,6 +180,7 @@
             font-size: 0.9rem;
             color: rgba(34, 197, 94, 0.9);
             margin-bottom: 3rem;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .status-dot {
@@ -165,10 +209,7 @@
             gap: 1rem;
             margin-bottom: 2rem;
             flex-wrap: wrap;
-        }
-
-        .container.side-layout .tabs {
-            justify-content: flex-start;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .tab {
@@ -198,35 +239,122 @@
 
         /* Content panels */
         .panels-container {
-            min-height: 400px;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .container.side-layout .panels-container {
+            opacity: 1;
+            max-height: 10000px;
         }
 
         .panel {
-            display: none;
-            animation: slideIn 0.5s ease-out;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
         }
 
         .panel.active {
-            display: block;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
         }
 
         /* Skills grid */
+        .skills-search {
+            margin-bottom: 2rem;
+        }
+
+        .skills-search input {
+            width: 100%;
+            max-width: 500px;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .skills-search input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .skills-search input:focus {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(70, 130, 255, 0.3);
+        }
+
+        .skill-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .category-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(70, 130, 255, 0.2);
+        }
+
+        .category-header:active {
+            transform: scale(0.98);
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .category-arrow {
+            color: rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .category-arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding-top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-top: 0;
+        }
+
+        .category-content.open {
+            max-height: 1000px;
+            padding-top: 1.5rem;
+        }
+
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
-            margin-top: 2rem;
+        }
+        
+        .category-content .skills-grid {
+            /* Prevent jumping by maintaining space */
+            min-height: fit-content;
         }
 
         .skill-card {
@@ -236,6 +364,11 @@
             border-radius: 20px;
             transition: all 0.3s ease;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
         .skill-card:hover {
@@ -245,15 +378,68 @@
         }
 
         .skill-icon {
-            font-size: 2.5rem;
+            width: 28px;
+            height: 28px;
             margin-bottom: 0.75rem;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .skill-icon svg,
+        .platform-icon svg,
+        .cert-icon svg,
+        .category-title svg {
+            width: 100%;
+            height: 100%;
+            stroke: rgba(255, 255, 255, 0.7);
+            fill: none;
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover .skill-icon svg {
+            stroke: rgba(255, 255, 255, 0.95);
+            transform: scale(1.1);
+        }
+
+        .platform-link:hover .platform-icon svg {
+            stroke: rgba(255, 255, 255, 0.95);
+        }
+
+        .platform-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cert-icon {
+            width: 32px;
+            height: 32px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .category-title svg {
+            width: 20px;
+            height: 20px;
         }
 
         .skill-name {
             font-size: 0.95rem;
             color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
+            text-align: center;
+            width: 100%;
         }
 
         /* Platforms */
@@ -309,10 +495,6 @@
             position: relative;
         }
 
-        .platform-icon {
-            font-size: 1.75rem;
-        }
-
         .platform-name {
             font-size: 1.05rem;
             font-weight: 500;
@@ -345,22 +527,65 @@
             line-height: 1.8;
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .container.side-layout {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .container.side-layout .header-section {
-                position: static;
-            }
-
-            .container.side-layout .tabs {
-                justify-content: center;
-            }
+        /* Certificates */
+        .certificates-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
         }
 
+        .certificates-dropdown.open {
+            max-height: 1000px;
+        }
+
+        .cert-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .cert-arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .cert-card {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .cert-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(70, 130, 255, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .cert-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+        }
+
+        .cert-issuer {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .logo {
                 font-size: 2.5rem;
@@ -393,7 +618,7 @@
         <div class="header-section">
             <div class="content">
                 <h1 class="logo">csecurity.dev</h1>
-                <p class="tagline">contact@csecurity.dev</p>
+                <p class="tagline"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="abc8c4c5dfcac8dfebc8d8cec8ded9c2dfd285cfcedd">[email&#160;protected]</a></p>
                 
                 <div class="status">
                     <span class="status-dot"></span>
@@ -412,82 +637,184 @@
         <div class="panels-container">
             <!-- Skills Panel -->
             <div id="skills" class="panel">
-                <div class="skills-grid">
-                    <div class="skill-card">
-                        <span class="skill-icon">🛡️</span>
-                        <div class="skill-name">Penetration Testing</div>
+                <!-- Search Bar -->
+                <div class="skills-search">
+                    <input type="text" id="skillSearch" placeholder="Search skills..." onkeyup="filterSkills()">
+                </div>
+
+                <!-- Security Tools Category -->
+                <div class="skill-category">
+                    <div class="category-header" onclick="return toggleCategory('security-tools', event);">
+                        <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Security Tools</span>
+                        <span class="category-arrow">▼</span>
                     </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🔍</span>
-                        <div class="skill-name">Threat Analysis</div>
+                    <div id="security-tools" class="category-content open">
+                        <div class="skills-grid">
+                            <div class="skill-card" data-skill="nmap">
+                                <span class="skill-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <div class="skill-name">Nmap</div>
+                            </div>
+                            <div class="skill-card" data-skill="burp suite">
+                                <span class="skill-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <div class="skill-name">Burp Suite</div>
+                            </div>
+                            <div class="skill-card" data-skill="metasploit">
+                                <span class="skill-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
+                                        <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M8 8l8 8M16 8l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </span>
+                                <div class="skill-name">Metasploit</div>
+                            </div>
+                            <div class="skill-card" data-skill="wireshark">
+                                <span class="skill-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <path d="M12 20h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M3 12h6M9 3v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </span>
+                                <div class="skill-name">Wireshark</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🔐</span>
-                        <div class="skill-name">Network Security</div>
+                </div>
+
+                <!-- Programming Languages Category -->
+                <div class="skill-category">
+                    <div class="category-header" onclick="return toggleCategory('programming', event);">
+                        <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Programming Languages</span>
+                        <span class="category-arrow">▼</span>
                     </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">⚠️</span>
-                        <div class="skill-name">OWASP Top 10</div>
+                    <div id="programming" class="category-content open">
+                        <div class="skills-grid">
+                            <div class="skill-card" data-skill="python">
+                                <span class="skill-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <path d="M16 18l2-2 4 4-4 4-2-2m0-12L14 8l-4-4 4-4 2 2M8 6l-2 2-4-4 4-4 2 2m0 12l2 2 4 4-4 4-2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <div class="skill-name">Python</div>
+                            </div>
+                            <div class="skill-card" data-skill="go">
+                                <span class="skill-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <polyline points="16 18 22 12 16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <polyline points="8 6 2 12 8 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <div class="skill-name">Go</div>
+                            </div>
+                            <div class="skill-card" data-skill="powershell">
+                                <span class="skill-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <polyline points="4 17 10 11 4 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <line x1="12" y1="19" x2="20" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </span>
+                                <div class="skill-name">PowerShell</div>
+                            </div>
+                            <div class="skill-card" data-skill="javascript">
+                                <span class="skill-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <path d="M3 3h18v18H3V3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M10 17v-4l-2 2-2-2v4M14 11v6l2-2 2 2v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <div class="skill-name">JavaScript</div>
+                            </div>
+                            <div class="skill-card" data-skill="html">
+                                <span class="skill-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <polygon points="12 2 2 7 12 12 22 7 12 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <polyline points="2 17 12 22 22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <polyline points="2 12 12 17 22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <div class="skill-name">HTML</div>
+                            </div>
+                            <div class="skill-card" data-skill="node.js nodejs">
+                                <span class="skill-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
+                                        <path d="M12 6v12M6 12h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </span>
+                                <div class="skill-name">Node.js</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">📋</span>
-                        <div class="skill-name">Vulnerability Assessment</div>
+                </div>
+
+                <!-- Platforms & Systems Category -->
+                <div class="skill-category">
+                    <div class="category-header" onclick="return toggleCategory('platforms-systems', event);">
+                        <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Platforms & Systems</span>
+                        <span class="category-arrow">▼</span>
                     </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🗺️</span>
-                        <div class="skill-name">Nmap</div>
+                    <div id="platforms-systems" class="category-content open">
+                        <div class="skills-grid">
+                            <div class="skill-card" data-skill="kali linux">
+                                <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+                                <div class="skill-name">Kali Linux</div>
+                            </div>
+                            <div class="skill-card" data-skill="security onion">
+                                <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/><circle cx="12" cy="12" r="6" stroke="currentColor" fill="none" stroke-width="2"/><circle cx="12" cy="12" r="2" /></svg></span>
+                                <div class="skill-name">Security Onion</div>
+                            </div>
+                            <div class="skill-card" data-skill="remnux">
+                                <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M9 3v12l-4.5 7h15L15 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 3h6M7 16h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+                                <div class="skill-name">Remnux</div>
+                            </div>
+                            <div class="skill-card" data-skill="elk stack">
+                                <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><line x1="12" y1="20" x2="12" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="20" x2="18" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="20" x2="6" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+                                <div class="skill-name">ELK Stack</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🔧</span>
-                        <div class="skill-name">Burp Suite</div>
+                </div>
+
+                <!-- Security Concepts Category -->
+                <div class="skill-category">
+                    <div class="category-header" onclick="return toggleCategory('concepts', event);">
+                        <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Security Concepts</span>
+                        <span class="category-arrow">▼</span>
                     </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">💥</span>
-                        <div class="skill-name">Metasploit</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🦈</span>
-                        <div class="skill-name">Wireshark</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🐉</span>
-                        <div class="skill-name">Kali Linux</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🧅</span>
-                        <div class="skill-name">Security Onion</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🔬</span>
-                        <div class="skill-name">Remnux</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">📊</span>
-                        <div class="skill-name">ELK Stack</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🐍</span>
-                        <div class="skill-name">Python</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🔷</span>
-                        <div class="skill-name">Go</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">⚡</span>
-                        <div class="skill-name">PowerShell</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">🌐</span>
-                        <div class="skill-name">HTML</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">💛</span>
-                        <div class="skill-name">JavaScript</div>
-                    </div>
-                    <div class="skill-card">
-                        <span class="skill-icon">💚</span>
-                        <div class="skill-name">Node.js</div>
+                    <div id="concepts" class="category-content open">
+                        <div class="skills-grid">
+                            <div class="skill-card" data-skill="penetration testing pentest">
+                                <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                <div class="skill-name">Penetration Testing</div>
+                            </div>
+                            <div class="skill-card" data-skill="threat analysis">
+                                <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+                                <div class="skill-name">Threat Analysis</div>
+                            </div>
+                            <div class="skill-card" data-skill="network security">
+                                <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+                                <div class="skill-name">Network Security</div>
+                            </div>
+                            <div class="skill-card" data-skill="owasp">
+                                <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+                                <div class="skill-name">OWASP Top 10</div>
+                            </div>
+                            <div class="skill-card" data-skill="vulnerability assessment">
+                                <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" stroke="currentColor" stroke-width="2"/><rect x="8" y="2" width="8" height="4" rx="1" stroke="currentColor" stroke-width="2"/></svg></span>
+                                <div class="skill-name">Vulnerability Assessment</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -495,25 +822,55 @@
             <!-- Platforms Panel -->
             <div id="platforms" class="panel">
                 <div class="platforms-grid">
-                    <a href="https://www.hackerrank.com/profile/csecurity" class="platform-link" target="_blank" rel="noopener">
+                    <!-- Certificates Toggle Button -->
+                    <div class="platform-link" onclick="toggleCertificates()" style="cursor: pointer;">
                         <div class="platform-info">
-                            <span class="platform-icon">👨‍💻</span>
-                            <span class="platform-name">HackerRank</span>
+                            <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M22 10v6M2 10l10-5 10 5-10 5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12v5c3 3 9 3 12 0v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                            <span class="platform-name">Certificates</span>
+                        </div>
+                        <span class="arrow cert-arrow">▼</span>
+                    </div>
+
+                    <!-- Certificates Dropdown -->
+                    <div id="certificates-dropdown" class="certificates-dropdown">
+                        <div class="certificates-grid">
+                            <div class="cert-card">
+                                <span class="cert-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+                                <div class="cert-name">CompTIA PenTest+</div>
+                                <div class="cert-issuer">PT0-003 • In Progress</div>
+                            </div>
+                            <div class="cert-card">
+                                <span class="cert-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+                                <div class="cert-name">CompTIA A+</div>
+                                <div class="cert-issuer">220-1201 • In Progress</div>
+                            </div>
+                            <div class="cert-card">
+                                <span class="cert-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                <div class="cert-name">CompTIA Security+</div>
+                                <div class="cert-issuer">SY0-701 • In Progress</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="https://github.com/opacity" class="platform-link" target="_blank" rel="noopener">
+                        <div class="platform-info">
+                            <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                            <span class="platform-name">GitHub</span>
                         </div>
                         <span class="arrow">→</span>
                     </a>
 
-                    <a href="https://github.com/opacity" class="platform-link" target="_blank" rel="noopener">
+                    <a href="https://www.hackerrank.com/profile/csecurity" class="platform-link" target="_blank" rel="noopener">
                         <div class="platform-info">
-                            <span class="platform-icon">🐙</span>
-                            <span class="platform-name">GitHub</span>
+                            <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M16 18l2-2 4 4-4 4-2-2m0-12L14 8l-4-4 4-4 2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                            <span class="platform-name">HackerRank</span>
                         </div>
                         <span class="arrow">→</span>
                     </a>
 
                     <a href="https://ctf.hackthebox.com/user/profile/948092" class="platform-link" target="_blank" rel="noopener">
                         <div class="platform-info">
-                            <span class="platform-icon">📦</span>
+                            <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="2"/><polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
                             <span class="platform-name">HackTheBox</span>
                         </div>
                         <span class="arrow">→</span>
@@ -521,7 +878,7 @@
 
                     <a href="https://app.letsdefend.io/user/securityc" class="platform-link" target="_blank" rel="noopener">
                         <div class="platform-info">
-                            <span class="platform-icon">🛡️</span>
+                            <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                             <span class="platform-name">LetsDefend</span>
                         </div>
                         <span class="arrow">→</span>
@@ -546,29 +903,28 @@
                 <div class="platforms-grid">
                     <div class="platform-link" style="cursor: default;">
                         <div class="platform-info">
-                            <span class="platform-icon">🖥️</span>
+                            <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
                             <span class="platform-name">Home Server</span>
                         </div>
-                        <span class="arrow">⚡</span>
                     </div>
 
                     <div class="platform-link" style="cursor: default;">
                         <div class="platform-info">
-                            <span class="platform-icon">🤖</span>
+                            <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><rect x="5" y="8" width="14" height="12" rx="2" stroke="currentColor" stroke-width="2"/><path d="M12 4v4M9 11h.01M15 11h.01M9 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 12H3M21 12h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
                             <span class="platform-name">Personal AI Agent</span>
                         </div>
-                        <span class="arrow">⚡</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         let currentTab = null;
         
         function switchTab(tabName) {
             const container = document.querySelector('.container');
+            const body = document.body;
             
             // If clicking the same tab, toggle back to center
             if (currentTab === tabName) {
@@ -580,8 +936,9 @@
                     panel.classList.remove('active');
                 });
                 
-                // Remove side layout
+                // Remove side layout with smooth transition
                 container.classList.remove('side-layout');
+                body.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
                 currentTab = null;
                 return;
             }
@@ -608,17 +965,93 @@
             // Show corresponding panel and add side layout
             document.getElementById(tabName).classList.add('active');
             container.classList.add('side-layout');
+            body.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+
+        function toggleCertificates() {
+            const dropdown = document.getElementById('certificates-dropdown');
+            const arrow = document.querySelector('.cert-arrow');
+            
+            dropdown.classList.toggle('open');
+            arrow.classList.toggle('rotated');
+        }
+
+        function toggleCategory(categoryId, event) {
+            // Prevent default behavior that causes scroll
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            const content = document.getElementById(categoryId);
+            const header = content.previousElementSibling;
+            const arrow = header.querySelector('.category-arrow');
+            
+            // Get the current scroll position
+            const scrollPos = window.scrollY;
+            
+            // Toggle classes
+            const isOpen = content.classList.contains('open');
+            
+            if (isOpen) {
+                content.classList.remove('open');
+                arrow.classList.remove('rotated');
+            } else {
+                content.classList.add('open');
+                arrow.classList.add('rotated');
+            }
+            
+            // Restore scroll position to prevent jump
+            requestAnimationFrame(() => {
+                window.scrollTo(0, scrollPos);
+            });
+            
+            return false;
+        }
+
+        function filterSkills() {
+            const searchTerm = document.getElementById('skillSearch').value.toLowerCase();
+            const skillCards = document.querySelectorAll('.skill-card');
+            const categories = document.querySelectorAll('.skill-category');
+            
+            skillCards.forEach(card => {
+                const skillName = card.getAttribute('data-skill');
+                if (skillName.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show all categories if searching, otherwise maintain their state
+            if (searchTerm.length > 0) {
+                categories.forEach(category => {
+                    const content = category.querySelector('.category-content');
+                    const hasVisibleSkills = Array.from(content.querySelectorAll('.skill-card'))
+                        .some(card => card.style.display !== 'none');
+                    
+                    if (hasVisibleSkills) {
+                        content.classList.add('open');
+                        category.querySelector('.category-arrow').classList.add('rotated');
+                    } else {
+                        content.classList.remove('open');
+                        category.querySelector('.category-arrow').classList.remove('rotated');
+                    }
+                });
+            }
         }
 
         // Add hover effect to skill cards
-        document.querySelectorAll('.skill-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px) scale(1.05)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.skill-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.05)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
             });
         });
     </script>
 </body>
-</html>
+</html> 
