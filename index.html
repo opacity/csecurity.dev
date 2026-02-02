@@ -6,6 +6,10 @@
     <title>csecurity.dev</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --accent-color: var(--accent-color);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -17,15 +21,122 @@
             background: #000000;
             color: #ffffff;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: block;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             padding: 0;
             margin: 0;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             scroll-behavior: smooth;
+        }
+
+        /* Main Landing - Full viewport height */
+        .main-landing {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        /* Color Slider */
+        .color-slider-container {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .color-slider-container.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .color-palette-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 28px;
+        }
+
+        .color-palette-button:hover {
+            transform: scale(1.2);
+        }
+
+        .color-slider {
+            -webkit-appearance: none;
+            width: 300px;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, 
+                #ffffff 0%,      /* White */
+                #ff4444 10%,     /* Bright Red */
+                #ff8800 20%,     /* Bright Orange */
+                #ffdd00 30%,     /* Bright Yellow */
+                #88ff44 40%,     /* Lime Green */
+                #00ff88 50%,     /* Bright Cyan */
+                #00ddff 60%,     /* Bright Sky Blue */
+                #4488ff 70%,     /* Royal Blue */
+                #8844ff 80%,     /* Bright Purple */
+                #ff44dd 90%,     /* Bright Magenta */
+                #000000 100%     /* Black */
+            );
+            outline: none;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .color-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
+        }
+
+        .color-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .color-slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
         }
 
         body > * {
@@ -71,7 +182,7 @@
         .orb-1 {
             width: 500px;
             height: 500px;
-            background: rgba(70, 130, 255, 0.4);
+            background: var(--accent-color, 0.4);
             top: -10%;
             left: -10%;
             animation: floatSlow1 60s ease-in-out infinite;
@@ -80,7 +191,7 @@
         .orb-2 {
             width: 400px;
             height: 400px;
-            background: rgba(100, 150, 255, 0.3);
+            background: var(--accent-color, 0.3);
             bottom: -10%;
             right: -10%;
             animation: floatSlow2 80s ease-in-out infinite;
@@ -153,7 +264,7 @@
             font-weight: 700;
             letter-spacing: -0.03em;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff 0%, rgba(70, 130, 255, 0.9) 100%);
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-color, 0.9) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -163,7 +274,7 @@
         .tagline {
             font-size: 1.1rem;
             color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             font-weight: 400;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -179,7 +290,7 @@
             border-radius: 20px;
             font-size: 0.9rem;
             color: rgba(34, 197, 94, 0.9);
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -232,8 +343,8 @@
         }
 
         .tab.active {
-            background: linear-gradient(135deg, rgba(70, 130, 255, 0.2), rgba(90, 150, 255, 0.3));
-            border-color: rgba(70, 130, 255, 0.3);
+            background: linear-gradient(135deg, var(--accent-color, 0.2), var(--accent-color, 0.3));
+            border-color: var(--accent-color, 0.3);
             color: rgba(255, 255, 255, 0.95);
         }
 
@@ -290,7 +401,7 @@
 
         .skills-search input:focus {
             background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(70, 130, 255, 0.3);
+            border-color: var(--accent-color, 0.3);
         }
 
         .skill-category {
@@ -312,7 +423,7 @@
 
         .category-header:hover {
             background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(70, 130, 255, 0.2);
+            border-color: var(--accent-color, 0.2);
         }
 
         .category-header:active {
@@ -373,7 +484,7 @@
 
         .skill-card:hover {
             background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(70, 130, 255, 0.3);
+            border-color: var(--accent-color, 0.3);
             transform: translateY(-4px) scale(1.02);
         }
 
@@ -473,7 +584,7 @@
             height: 100%;
             background: linear-gradient(90deg, 
                 transparent, 
-                rgba(70, 130, 255, 0.1), 
+                var(--accent-color, 0.1), 
                 transparent);
             transition: left 0.5s ease;
         }
@@ -484,7 +595,7 @@
 
         .platform-link:hover {
             background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(70, 130, 255, 0.3);
+            border-color: var(--accent-color, 0.3);
             transform: translateX(8px);
         }
 
@@ -508,7 +619,7 @@
         }
 
         .platform-link:hover .arrow {
-            color: rgba(70, 130, 255, 0.8);
+            color: var(--accent-color, 0.8);
             transform: translateX(4px);
         }
 
@@ -569,7 +680,7 @@
 
         .cert-card:hover {
             background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(70, 130, 255, 0.3);
+            border-color: var(--accent-color, 0.3);
             transform: translateY(-4px);
         }
 
@@ -608,13 +719,128 @@
                 padding: 1rem 1.25rem;
             }
         }
+
+        /* Clients Protected Section */
+        .clients-section-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+        }
+
+        .clients-section {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .clients-container {
+            max-width: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .clients-header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            min-width: 250px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .clients-number {
+            font-size: 6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-color), rgba(255, 255, 255, 0.9));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .clients-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        .clients-graph {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .clients-graph svg {
+            width: 100%;
+            height: auto;
+        }
+
+        .graph-curve {
+            filter: drop-shadow(0 0 10px var(--accent-color));
+        }
+
+        .graph-dot {
+            filter: drop-shadow(0 0 8px var(--accent-color));
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .clients-container {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .clients-header {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .clients-graph {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
 
-    <div class="container">
+    <!-- Color Palette Button -->
+    <div class="color-palette-button" onclick="toggleColorSlider()">
+        🎨
+    </div>
+
+    <!-- Color Slider -->
+    <div class="color-slider-container" id="colorSliderContainer">
+        <input type="range" id="colorSlider" min="0" max="100" value="60" class="color-slider">
+    </div>
+
+    <!-- Main Landing Section - Full Screen -->
+    <section class="main-landing">
+        <div class="container">
         <div class="header-section">
             <div class="content">
                 <h1 class="logo">csecurity.dev</h1>
@@ -892,8 +1118,9 @@
                     <p class="about-text">
                         Hey, I'm 21 and currently pursuing a Bachelor of Science in Cyber Security. 
                         I've been fascinated by computers for almost a decade now – what started as curiosity 
-                        turned into a passion. I've been coding for 4 years and learning red/blue teaming for
-                        the past 2 years. 
+                        turned into a passion. I've been coding for 4 years and diving deep into red teaming 
+                        and blue teaming for the past 2 years. Always learning, always breaking things 
+                        (legally, of course), and constantly improving my craft.
                     </p>
                 </div>
             </div>
@@ -917,10 +1144,157 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Clients Protected Section - Scroll Down -->
+    <section class="clients-section-wrapper">
+        <div class="clients-section">
+            <div class="clients-container">
+                <div class="clients-header">
+                    <div class="clients-number">5</div>
+                    <div class="clients-label">Clients Protected</div>
+                </div>
+                <div class="clients-graph">
+                    <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Grid lines -->
+                        <line x1="10" y1="50" x2="410" y2="50" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        <line x1="10" y1="100" x2="410" y2="100" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        <line x1="10" y1="150" x2="410" y2="150" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        
+                        <!-- Gradient fill under curve -->
+                        <defs>
+                            <linearGradient id="graphGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:var(--accent-color);stop-opacity:0.3" />
+                                <stop offset="100%" style="stop-color:var(--accent-color);stop-opacity:0" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- Area under curve -->
+                        <path d="M 20 180 L 20 140 C 60 135, 90 130, 143 100 C 196 70, 230 60, 276 40 C 322 20, 360 15, 390 10 L 390 180 Z" 
+                              fill="url(#graphGradient)"/>
+                        
+                        <!-- Main curve line -->
+                        <path d="M 20 140 C 60 135, 90 130, 143 100 C 196 70, 230 60, 276 40 C 322 20, 360 15, 390 10" 
+                              stroke="var(--accent-color)" 
+                              stroke-width="3" 
+                              fill="none"
+                              class="graph-curve"/>
+                        
+                        <!-- Data points -->
+                        <circle cx="20" cy="140" r="6" fill="var(--accent-color)" class="graph-dot"/>
+                        <circle cx="143" cy="100" r="6" fill="var(--accent-color)" class="graph-dot"/>
+                        <circle cx="276" cy="40" r="6" fill="var(--accent-color)" class="graph-dot"/>
+                        <circle cx="390" cy="10" r="6" fill="var(--accent-color)" class="graph-dot"/>
+                        
+                        <!-- Labels -->
+                        <text x="20" y="165" fill="rgba(255,255,255,0.6)" font-size="14" text-anchor="middle">2</text>
+                        <text x="143" y="125" fill="rgba(255,255,255,0.6)" font-size="14" text-anchor="middle">3</text>
+                        <text x="276" y="65" fill="rgba(255,255,255,0.6)" font-size="14" text-anchor="middle">4</text>
+                        <text x="390" y="35" fill="rgba(255,255,255,0.6)" font-size="14" text-anchor="middle">5</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         let currentTab = null;
+        
+        // Color Slider Logic
+        const colorSlider = document.getElementById('colorSlider');
+        const colorSliderContainer = document.getElementById('colorSliderContainer');
+        
+        function toggleColorSlider() {
+            colorSliderContainer.classList.toggle('open');
+        }
+        
+        function updateColors(value) {
+            // Map slider to vibrant, recognizable colors
+            // 0=white, 10=red, 20=orange, 30=yellow, 40=lime, 50=cyan, 60=sky blue, 70=royal blue, 80=purple, 90=magenta, 100=black
+            
+            let r, g, b;
+            
+            if (value <= 10) {
+                // White to Bright Red
+                const progress = value / 10;
+                r = 255;
+                g = Math.round(255 - (255 - 68) * progress);
+                b = Math.round(255 - (255 - 68) * progress);
+            } else if (value <= 20) {
+                // Bright Red to Bright Orange
+                const progress = (value - 10) / 10;
+                r = 255;
+                g = Math.round(68 + (136 - 68) * progress);
+                b = Math.round(68 * (1 - progress));
+            } else if (value <= 30) {
+                // Bright Orange to Bright Yellow
+                const progress = (value - 20) / 10;
+                r = 255;
+                g = Math.round(136 + (221 - 136) * progress);
+                b = Math.round(0);
+            } else if (value <= 40) {
+                // Bright Yellow to Lime Green
+                const progress = (value - 30) / 10;
+                r = Math.round(255 - (255 - 136) * progress);
+                g = 255;
+                b = Math.round(0 + 68 * progress);
+            } else if (value <= 50) {
+                // Lime Green to Bright Cyan
+                const progress = (value - 40) / 10;
+                r = Math.round(136 * (1 - progress));
+                g = 255;
+                b = Math.round(68 + (136 - 68) * progress);
+            } else if (value <= 60) {
+                // Bright Cyan to Bright Sky Blue
+                const progress = (value - 50) / 10;
+                r = Math.round(0);
+                g = Math.round(255 - (255 - 221) * progress);
+                b = Math.round(136 + (255 - 136) * progress);
+            } else if (value <= 70) {
+                // Bright Sky Blue to Royal Blue
+                const progress = (value - 60) / 10;
+                r = Math.round(0 + 68 * progress);
+                g = Math.round(221 - (221 - 136) * progress);
+                b = 255;
+            } else if (value <= 80) {
+                // Royal Blue to Bright Purple
+                const progress = (value - 70) / 10;
+                r = Math.round(68 + (136 - 68) * progress);
+                g = Math.round(136 - (136 - 68) * progress);
+                b = 255;
+            } else if (value <= 90) {
+                // Bright Purple to Bright Magenta
+                const progress = (value - 80) / 10;
+                r = Math.round(136 + (255 - 136) * progress);
+                g = Math.round(68 * (1 - progress) + 68 * progress);
+                b = Math.round(255 - (255 - 221) * progress);
+            } else {
+                // Bright Magenta to Black
+                const progress = (value - 90) / 10;
+                r = Math.round(255 * (1 - progress));
+                g = Math.round(68 * (1 - progress));
+                b = Math.round(221 * (1 - progress));
+            }
+            
+            const accentColor = `rgb(${r}, ${g}, ${b})`;
+            const accentColorWithAlpha = (alpha) => `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            
+            // Update CSS custom property
+            document.documentElement.style.setProperty('--accent-color', accentColor);
+            
+            // Update orb colors with transparency
+            const orb1 = document.querySelector('.orb-1');
+            const orb2 = document.querySelector('.orb-2');
+            if (orb1) orb1.style.background = accentColorWithAlpha(0.4);
+            if (orb2) orb2.style.background = accentColorWithAlpha(0.3);
+        }
+        
+        colorSlider.addEventListener('input', (e) => {
+            updateColors(e.target.value);
+        });
+        
+        // Initialize with blue (value 60)
+        updateColors(60);
         
         function switchTab(tabName) {
             const container = document.querySelector('.container');
