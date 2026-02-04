@@ -220,6 +220,8 @@
             border-radius: 50%;
             pointer-events: none;
             animation: particlePulse 3s ease-in-out infinite;
+            filter: blur(0.5px);
+            opacity: 0.5;
         }
 
         /* Shooting star */
@@ -699,6 +701,15 @@
             transform: translateY(0);
             pointer-events: auto;
             position: relative;
+            z-index: 100;
+        }
+
+        #platforms {
+            z-index: 100;
+        }
+
+        #platforms.active {
+            z-index: 1000;
         }
 
         /* Skills grid */
@@ -914,12 +925,13 @@
             border-radius: 20px;
             text-decoration: none;
             color: inherit;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            z-index: 100;
+            z-index: 1000 !important;
             cursor: pointer !important;
             pointer-events: auto !important;
+            will-change: transform;
         }
 
         .platform-link::before {
@@ -935,6 +947,7 @@
                 transparent);
             transition: left 0.5s ease;
             pointer-events: none;
+            z-index: 1;
         }
 
         .platform-link:hover::before {
@@ -952,21 +965,28 @@
             align-items: center;
             gap: 1rem;
             position: relative;
+            z-index: 2;
         }
 
         .platform-name {
             font-size: 1.05rem;
             font-weight: 500;
             color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 2;
         }
 
         .platform-icon {
+            position: relative;
+            z-index: 2;
         }
 
         .arrow {
             color: rgba(255, 255, 255, 0.3);
             font-size: 1.25rem;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
         }
 
         .platform-link:hover .arrow {
@@ -1079,8 +1099,12 @@
             justify-content: center;
             padding: 0rem 2rem 4rem 2rem;
             position: relative;
-            z-index: 1;
+            z-index: 0;
             margin-top: -20vh;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
 
         .terminal-container {
@@ -1531,7 +1555,7 @@
                         </div>
                     </div>
 
-                    <a href="https://github.com/opacity" class="platform-link" target="_blank" rel="noopener">
+                    <a href="https://github.com/opacity" class="platform-link" target="_blank" rel="noopener" onclick="openLink('https://github.com/opacity'); return false;">
                         <div class="platform-info">
                             <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                             <span class="platform-name">GitHub</span>
@@ -1539,7 +1563,7 @@
                         <span class="arrow">→</span>
                     </a>
 
-                    <a href="https://www.hackerrank.com/profile/csecurity" class="platform-link" target="_blank" rel="noopener">
+                    <a href="https://www.hackerrank.com/profile/csecurity" class="platform-link" target="_blank" rel="noopener" onclick="openLink('https://www.hackerrank.com/profile/csecurity'); return false;">
                         <div class="platform-info">
                             <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M16 18l2-2 4 4-4 4-2-2m0-12L14 8l-4-4 4-4 2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                             <span class="platform-name">HackerRank</span>
@@ -1547,21 +1571,21 @@
                         <span class="arrow">→</span>
                     </a>
 
-                    <a href="https://ctf.hackthebox.com/user/profile/948092" class="platform-link" target="_blank" rel="noopener">
+                    <div class="platform-link" onclick="alert('HackTheBox clicked!'); window.open('https://ctf.hackthebox.com/user/profile/948092', '_blank', 'noopener,noreferrer');" style="cursor: pointer;">
                         <div class="platform-info">
                             <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="2"/><polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
                             <span class="platform-name">HackTheBox</span>
                         </div>
                         <span class="arrow">→</span>
-                    </a>
+                    </div>
 
-                    <a href="https://app.letsdefend.io/user/securityc" class="platform-link" target="_blank" rel="noopener">
+                    <div class="platform-link" onclick="alert('LetsDefend clicked!'); window.open('https://app.letsdefend.io/user/securityc', '_blank', 'noopener,noreferrer');" style="cursor: pointer;">
                         <div class="platform-info">
                             <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                             <span class="platform-name">LetsDefend</span>
                         </div>
                         <span class="arrow">→</span>
-                    </a>
+                    </div>
                 </div>
             </div>
 
@@ -1662,34 +1686,12 @@
             if (settingsBtn) {
                 settingsBtn.style.cssText = 'position: fixed !important; top: 5px !important; right: 15px !important; z-index: 9999 !important;';
             }
-            
-            // Debug and ensure platform links work
-            const platformLinks = document.querySelectorAll('.platform-link');
-            console.log('Found platform links:', platformLinks.length);
-            
-            platformLinks.forEach((link, index) => {
-                const href = link.getAttribute('href');
-                const name = link.querySelector('.platform-name')?.textContent;
-                console.log(`Link ${index}: ${name} -> ${href}`);
-                
-                // Add click handler
-                link.addEventListener('click', function(e) {
-                    console.log(`Clicked: ${name}`);
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const url = this.getAttribute('href');
-                    if (url) {
-                        console.log(`Opening: ${url}`);
-                        window.open(url, '_blank', 'noopener,noreferrer');
-                    }
-                });
-                
-                // Make sure link is visible and clickable
-                link.style.pointerEvents = 'auto';
-                link.style.cursor = 'pointer';
-            });
         });
+        
+        // Simple function to open links - called directly from HTML
+        function openLink(url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
         
         function toggleSettings() {
             const modal = document.getElementById('settingsModal');
@@ -1754,14 +1756,12 @@
         if (settingsColorInput) {
             // Load saved color first
             const savedColor = localStorage.getItem('accentColor');
-            console.log('Loaded saved color:', savedColor);
             
             if (savedColor) {
                 settingsColorInput.value = savedColor;
                 // Small delay to ensure everything is loaded
                 setTimeout(() => {
                     updateColors(parseInt(savedColor));
-                    console.log('Applied saved color:', savedColor);
                 }, 100);
             }
             
@@ -1770,7 +1770,6 @@
                 const colorValue = e.target.value;
                 updateColors(colorValue);
                 localStorage.setItem('accentColor', colorValue);
-                console.log('Saved color:', colorValue);
             });
         }
         
@@ -2093,7 +2092,6 @@
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
-            console.log('Created', particles.length, 'particles');
         }
 
         function animateParticles() {
