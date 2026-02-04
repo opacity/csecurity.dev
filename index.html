@@ -216,14 +216,43 @@
 
         .particle {
             position: absolute;
-            width: 2px;
-            height: 2px;
             background: var(--accent-color);
             border-radius: 50%;
-            opacity: 0.5;
-            filter: blur(0.3px);
             pointer-events: none;
             animation: particlePulse 3s ease-in-out infinite;
+        }
+
+        /* Shooting star */
+        .shooting-star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-color), transparent);
+            transform: translateX(-80px);
+        }
+
+        @keyframes shootingStar {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(1000px, 1000px);
+                opacity: 0;
+            }
         }
 
         @keyframes particlePulse {
@@ -250,12 +279,14 @@
         /* Settings and Palette Buttons */
         .top-right-buttons {
             position: fixed !important;
-            top: 20px !important;
-            right: 20px !important;
-            z-index: 1002;
+            top: 5px !important;
+            right: 15px !important;
+            z-index: 9999 !important;
             display: flex;
             gap: 1.5rem;
             align-items: center;
+            margin: 0;
+            padding: 0;
         }
 
         .icon-button {
@@ -268,6 +299,8 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin: 0;
+            padding: 0;
         }
 
         .icon-button:hover {
@@ -284,15 +317,16 @@
         /* Settings Modal */
         .settings-modal {
             position: fixed;
-            top: 20px;
-            right: 90px;
-            background: rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            top: 5px;
+            right: 85px;
+            background: rgba(0, 0, 0, 0.02);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
             border-radius: 16px;
             z-index: 2000;
             display: none;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
             animation: slideDown 0.2s ease;
             padding: 1rem;
         }
@@ -345,7 +379,8 @@
             width: 40px;
             height: 20px;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -762,13 +797,33 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--accent-color, 0.1), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .skill-card:hover::before {
+            left: 100%;
         }
 
         .skill-card:hover {
@@ -1155,8 +1210,8 @@
     <div class="particles-container" id="particlesContainer"></div>
 
     <!-- Top Right Buttons -->
-    <div class="top-right-buttons" style="position: fixed !important; top: 20px !important; right: 20px !important;">
-        <div class="icon-button" onclick="toggleSettings()" title="Settings">
+    <div class="top-right-buttons" style="position: fixed !important; top: 5px !important; right: 15px !important; z-index: 9999 !important;">
+        <div class="icon-button" onclick="toggleSettings()" title="Settings" style="margin: 0 !important; padding: 0 !important;">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1567,11 +1622,18 @@
     <script>
         // Particle System - MUST BE DECLARED FIRST
         let particleContainer;
-        let particleCount = 200; // Increased from 100
+        let particleCount = 400; // Doubled from 200
         let particles = [];
+        let shootingStars = [];
         
         let currentTab = null;
-        let particlesEnabled = false;
+        let particlesEnabled = localStorage.getItem('particlesEnabled') === 'true' || false;
+
+        // Load saved color
+        const savedColor = localStorage.getItem('accentColor');
+        if (savedColor) {
+            updateColors(parseInt(savedColor));
+        }
 
         // Typewriter effect for logo
         function initTypewriter() {
@@ -1592,6 +1654,14 @@
 
         // Start typewriter on page load
         window.addEventListener('load', initTypewriter);
+        
+        // Force settings button position
+        window.addEventListener('load', () => {
+            const settingsBtn = document.querySelector('.top-right-buttons');
+            if (settingsBtn) {
+                settingsBtn.style.cssText = 'position: fixed !important; top: 5px !important; right: 15px !important; z-index: 9999 !important;';
+            }
+        });
         
         function toggleSettings() {
             const modal = document.getElementById('settingsModal');
@@ -1627,6 +1697,9 @@
             } else {
                 container.style.display = 'none';
             }
+            
+            // Save to localStorage
+            localStorage.setItem('particlesEnabled', particlesEnabled);
         }
 
         // Update color preview button when color changes
@@ -1653,8 +1726,28 @@
         if (settingsColorInput) {
             settingsColorInput.addEventListener('input', (e) => {
                 updateColors(e.target.value);
+                localStorage.setItem('accentColor', e.target.value);
             });
+            
+            // Set slider to saved value
+            if (savedColor) {
+                settingsColorInput.value = savedColor;
+            }
         }
+        
+        // Apply saved particles state on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggle = document.getElementById('particlesToggle');
+            const container = document.getElementById('particlesContainer');
+            
+            if (particlesEnabled) {
+                toggle.classList.add('active');
+                container.style.display = 'block';
+            } else {
+                toggle.classList.remove('active');
+                container.style.display = 'none';
+            }
+        });
         
         function toggleColorSlider() {
             colorSliderContainer.classList.toggle('open');
@@ -1866,6 +1959,17 @@
                 this.element = document.createElement('div');
                 this.element.className = 'particle';
                 
+                // 80% tiny particles, 20% bigger particles
+                const isTiny = Math.random() < 0.8;
+                if (isTiny) {
+                    this.size = 0.5 + Math.random() * 1; // 0.5-1.5px
+                } else {
+                    this.size = 1.5 + Math.random() * 1.5; // 1.5-3px
+                }
+                
+                this.element.style.width = this.size + 'px';
+                this.element.style.height = this.size + 'px';
+                
                 this.reset();
                 if (particleContainer) {
                     particleContainer.appendChild(this.element);
@@ -1959,6 +2063,34 @@
             }
             requestAnimationFrame(animateParticles);
         }
+
+        // Shooting star system
+        function createShootingStar() {
+            if (!particlesEnabled) return;
+            
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            
+            // Random starting position (top or right edge)
+            const startFromTop = Math.random() > 0.5;
+            if (startFromTop) {
+                star.style.left = Math.random() * window.innerWidth + 'px';
+                star.style.top = '0px';
+            } else {
+                star.style.left = window.innerWidth + 'px';
+                star.style.top = Math.random() * (window.innerHeight / 2) + 'px';
+            }
+            
+            star.style.animation = 'shootingStar 1.5s linear forwards';
+            
+            if (particleContainer) {
+                particleContainer.appendChild(star);
+                setTimeout(() => star.remove(), 1500);
+            }
+        }
+
+        // Create shooting star every 30 seconds
+        setInterval(createShootingStar, 30000);
 
         // Mouse interaction with particles
         let mousePos = { x: 0, y: 0 };
