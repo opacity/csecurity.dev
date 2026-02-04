@@ -917,6 +917,9 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            z-index: 100;
+            cursor: pointer !important;
+            pointer-events: auto !important;
         }
 
         .platform-link::before {
@@ -931,6 +934,7 @@
                 var(--accent-color, 0.1), 
                 transparent);
             transition: left 0.5s ease;
+            pointer-events: none;
         }
 
         .platform-link:hover::before {
@@ -954,6 +958,9 @@
             font-size: 1.05rem;
             font-weight: 500;
             color: rgba(255, 255, 255, 0.9);
+        }
+
+        .platform-icon {
         }
 
         .arrow {
@@ -1629,12 +1636,6 @@
         let currentTab = null;
         let particlesEnabled = localStorage.getItem('particlesEnabled') === 'true' || false;
 
-        // Load saved color
-        const savedColor = localStorage.getItem('accentColor');
-        if (savedColor) {
-            updateColors(parseInt(savedColor));
-        }
-
         // Typewriter effect for logo
         function initTypewriter() {
             const typewriterText = "csecurity.dev";
@@ -1661,6 +1662,17 @@
             if (settingsBtn) {
                 settingsBtn.style.cssText = 'position: fixed !important; top: 5px !important; right: 15px !important; z-index: 9999 !important;';
             }
+            
+            // Ensure platform links work with direct click handlers
+            const platformLinks = document.querySelectorAll('.platform-link');
+            platformLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href) {
+                        window.open(href, '_blank', 'noopener,noreferrer');
+                    }
+                });
+            });
         });
         
         function toggleSettings() {
@@ -1729,9 +1741,11 @@
                 localStorage.setItem('accentColor', e.target.value);
             });
             
-            // Set slider to saved value
+            // Load and apply saved color
+            const savedColor = localStorage.getItem('accentColor');
             if (savedColor) {
                 settingsColorInput.value = savedColor;
+                updateColors(parseInt(savedColor));
             }
         }
         
