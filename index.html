@@ -227,23 +227,12 @@
         /* Shooting star */
         .shooting-star {
             position: absolute;
-            width: 3px;
-            height: 3px;
+            width: 4px;
+            height: 4px;
             background: var(--accent-color);
             border-radius: 50%;
             pointer-events: none;
-            box-shadow: 0 0 10px var(--accent-color);
-        }
-
-        .shooting-star::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 80px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-color), transparent);
-            transform: translateX(-80px);
+            box-shadow: 0 0 15px var(--accent-color), 0 0 30px var(--accent-color);
         }
 
         @keyframes shootingStar {
@@ -252,7 +241,7 @@
                 opacity: 1;
             }
             100% {
-                transform: translate(1000px, 1000px);
+                transform: translate(1500px, 200px);
                 opacity: 0;
             }
         }
@@ -702,6 +691,7 @@
             pointer-events: auto;
             position: relative;
             z-index: 100;
+            isolation: isolate;
         }
 
         #platforms {
@@ -709,7 +699,8 @@
         }
 
         #platforms.active {
-            z-index: 1000;
+            z-index: 100;
+            isolation: isolate;
         }
 
         /* Skills grid */
@@ -928,10 +919,15 @@
             transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            z-index: 1000 !important;
+            z-index: 1;
             cursor: pointer !important;
-            pointer-events: auto !important;
+            pointer-events: none;
             will-change: transform;
+        }
+
+        /* Only enable clicks when platforms panel is active */
+        #platforms.active .platform-link {
+            pointer-events: auto;
         }
 
         .platform-link::before {
@@ -1067,6 +1063,469 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
+        /* Incident Replay Section */
+        .incident-replay-section {
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .incident-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .incident-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .incident-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Perspective Toggle */
+        .perspective-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .perspective-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .perspective-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .perspective-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .perspective-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #000000;
+            font-weight: 600;
+        }
+
+        .perspective-btn.active svg {
+            stroke: #000000;
+        }
+
+        /* Perspective Content */
+        .perspective-content {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .perspective-content.hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .perspective-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Detection Notes */
+        .detection-note {
+            margin-top: 1rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .detection-note.missed {
+            background: rgba(255, 100, 100, 0.1);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            color: #ff6464;
+        }
+
+        .detection-note.partial {
+            background: rgba(255, 200, 0, 0.1);
+            border: 1px solid rgba(255, 200, 0, 0.3);
+            color: #ffc800;
+        }
+
+        .detection-note.detected {
+            background: rgba(0, 255, 100, 0.1);
+            border: 1px solid rgba(0, 255, 100, 0.3);
+            color: #00ff64;
+        }
+
+        /* Executive Summary */
+        .executive-summary {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .exec-item {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .exec-item strong {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+
+        .exec-item.insight {
+            padding-left: 1rem;
+            border-left: 3px solid var(--accent-color);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .risk-low { color: #00ff64; font-weight: 600; }
+        .risk-medium { color: #ffc800; font-weight: 600; }
+        .risk-high { color: #ff8800; font-weight: 600; }
+        .risk-critical { color: #ff3232; font-weight: 600; }
+
+        .timeline-track {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            position: relative;
+            padding-left: 80px;
+        }
+
+        /* Roadmap Line */
+        .timeline-track::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                transparent 0%,
+                var(--accent-color) 10%,
+                var(--accent-color) 90%,
+                transparent 100%
+            );
+            opacity: 0.3;
+        }
+
+        .timeline-stage {
+            opacity: 0.3;
+            transform: translateX(20px);
+            transition: all 0.6s ease;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .timeline-stage::before {
+            content: '';
+            position: absolute;
+            left: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            transition: all 0.6s ease;
+        }
+
+        .timeline-stage.active {
+            opacity: 1;
+            transform: translateX(0);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(var(--accent-color-rgb, 59, 130, 246), 0.15);
+        }
+
+        .timeline-stage.active::before {
+            background: var(--accent-color);
+            width: 16px;
+            height: 16px;
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+
+        .stage-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            opacity: 0.3;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-stage.active .stage-number {
+            opacity: 1;
+        }
+
+        .stage-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .stage-visual {
+            margin-bottom: 1rem;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Traffic Flow Animation */
+        .traffic-flow {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .traffic-line {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-stage.active .traffic-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 30%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: traffic-flow 2s infinite;
+        }
+
+        @keyframes traffic-flow {
+            to {
+                left: 100%;
+            }
+        }
+
+        .traffic-line.suspicious::after {
+            background: linear-gradient(90deg, transparent, rgba(255, 200, 0, 0.8), transparent);
+        }
+
+        .traffic-line.danger::after {
+            background: linear-gradient(90deg, transparent, rgba(255, 50, 50, 0.8), transparent);
+            animation: traffic-flow 0.8s infinite;
+        }
+
+        /* SOC Dashboard */
+        .soc-dashboard {
+            width: 100%;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .alert-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .alert-item {
+            padding: 0.8rem 1rem;
+            background: rgba(255, 50, 50, 0.1);
+            border-left: 3px solid #ff3232;
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: 4px;
+        }
+
+        .timeline-stage.active .alert-item {
+            animation: pulse-alert 2s infinite;
+        }
+
+        @keyframes pulse-alert {
+            0%, 100% {
+                background: rgba(255, 50, 50, 0.1);
+            }
+            50% {
+                background: rgba(255, 50, 50, 0.2);
+            }
+        }
+
+        /* Containment Actions */
+        .containment-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .action-item {
+            padding: 1rem 1.5rem;
+            background: rgba(0, 255, 100, 0.05);
+            border-left: 3px solid #00ff64;
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: 4px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.5s ease;
+        }
+
+        .timeline-stage.active .action-item {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-stage.active .action-item:nth-child(1) { transition-delay: 0.2s; }
+        .timeline-stage.active .action-item:nth-child(2) { transition-delay: 0.4s; }
+        .timeline-stage.active .action-item:nth-child(3) { transition-delay: 0.6s; }
+        .timeline-stage.active .action-item:nth-child(4) { transition-delay: 0.8s; }
+
+        /* Log Entries */
+        .log-entries {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+
+        .log-entry {
+            padding: 0.4rem;
+            color: rgba(255, 255, 255, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .timeline-stage.active .log-entry {
+            animation: typewriter 1s steps(60) forwards;
+            width: 0;
+        }
+
+        .timeline-stage.active .log-entry:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .timeline-stage.active .log-entry:nth-child(2) {
+            animation-delay: 0.8s;
+        }
+
+        .timeline-stage.active .log-entry:nth-child(3) {
+            animation-delay: 1.4s;
+        }
+
+        @keyframes typewriter {
+            to {
+                width: 100%;
+            }
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-entry.warning {
+            color: #ffa500;
+        }
+
+        .log-entry.danger {
+            color: #ff3232;
+            font-weight: bold;
+        }
+
+        .log-entry.success {
+            color: #00ff64;
+        }
+
+        /* Alert Badges */
+        .alert-badge {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .alert-badge.critical {
+            background: rgba(255, 50, 50, 0.2);
+            border: 2px solid #ff3232;
+            color: #ff3232;
+        }
+
+        .timeline-stage.active .alert-badge.critical {
+            animation: pulse-badge 1s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .alert-badge.resolved {
+            background: rgba(0, 255, 100, 0.2);
+            border: 2px solid #00ff64;
+            color: #00ff64;
+        }
+
+        /* Contact Footer */
+        .contact-section {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .contact-container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .contact-container p {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .logo {
@@ -1097,10 +1556,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0rem 2rem 4rem 2rem;
+            padding: 4rem 2rem;
             position: relative;
             z-index: 0;
-            margin-top: -20vh;
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -1225,6 +1683,30 @@
                 padding: 1rem;
                 font-size: 0.8rem;
             }
+
+            .timeline-track {
+                padding-left: 60px;
+            }
+
+            .timeline-track::before {
+                left: 20px;
+            }
+
+            .timeline-stage::before {
+                left: -40px;
+            }
+
+            .incident-title {
+                font-size: 1.5rem;
+            }
+
+            .stage-title {
+                font-size: 1.1rem;
+            }
+
+            .log-entries {
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
@@ -1313,7 +1795,7 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Offensive Security Tools</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="offensive-tools" class="category-content open">
+                    <div id="offensive-tools" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="nmap"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">Nmap</div></div>
                             <div class="skill-card" data-skill="burp suite"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">Burp Suite</div></div>
@@ -1337,7 +1819,7 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Active Directory Attacks</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="ad-attacks" class="category-content open">
+                    <div id="ad-attacks" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="kerberoasting"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">Kerberoasting</div></div>
                             <div class="skill-card" data-skill="as-rep roasting asrep"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">AS-REP Roasting</div></div>
@@ -1359,7 +1841,7 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/></svg> Windows Security & Evasion</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="windows-evasion" class="category-content open">
+                    <div id="windows-evasion" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="amsi bypass"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div class="skill-name">AMSI Bypass</div></div>
                             <div class="skill-card" data-skill="powershell obfuscation"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="4 17 10 11 4 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="19" x2="20" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div class="skill-name">PowerShell Obfuscation</div></div>
@@ -1380,7 +1862,7 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="currentColor" stroke-width="2"/></svg> Web Application Vulnerabilities</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="web-vulns" class="category-content open">
+                    <div id="web-vulns" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="owasp top 10"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div class="skill-name">OWASP Top 10</div></div>
                             <div class="skill-card" data-skill="ssrf server-side request forgery"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="15" rx="2" ry="2" stroke="currentColor" stroke-width="2"/><polyline points="17 2 12 7 7 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">SSRF</div></div>
@@ -1399,7 +1881,7 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg> Protocol & Service Abuse</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="protocol-abuse" class="category-content open">
+                    <div id="protocol-abuse" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="smb abuse smb"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg></span><div class="skill-name">SMB Abuse</div></div>
                             <div class="skill-card" data-skill="ldap abuse ldap"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="2"/></svg></span><div class="skill-name">LDAP Abuse</div></div>
@@ -1416,7 +1898,7 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Defensive Security Tools</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="defensive-tools" class="category-content open">
+                    <div id="defensive-tools" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="wireshark"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 20h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">Wireshark</div></div>
                             <div class="skill-card" data-skill="crowdstrike"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">CrowdStrike</div></div>
@@ -1437,7 +1919,7 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Cloud Security</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="cloud-security" class="category-content open">
+                    <div id="cloud-security" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="aws amazon web services"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">AWS</div></div>
                             <div class="skill-card" data-skill="azure microsoft"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">Azure</div></div>
@@ -1456,7 +1938,7 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3v12l-4.5 7h15L15 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 3h6M7 16h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Malware Analysis & Reverse Engineering</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="malware-re" class="category-content open">
+                    <div id="malware-re" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="remnux"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3v12l-4.5 7h15L15 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 3h6M7 16h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div class="skill-name">REMnux</div></div>
                             <div class="skill-card" data-skill="ida pro ida"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" stroke="currentColor" stroke-width="2"/><polyline points="13 2 13 9 20 9" stroke="currentColor" stroke-width="2"/></svg></span><div class="skill-name">IDA Pro</div></div>
@@ -1473,7 +1955,7 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="16 18 22 12 16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="8 6 2 12 8 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Programming Languages</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="programming" class="category-content open">
+                    <div id="programming" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="python"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 18l2-2 4 4-4 4-2-2m0-12L14 8l-4-4 4-4 2 2M8 6l-2 2-4-4 4-4 2 2m0 12l2 2 4 4-4 4-2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">Python</div></div>
                             <div class="skill-card" data-skill="go golang"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="16 18 22 12 16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="8 6 2 12 8 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">Go</div></div>
@@ -1495,9 +1977,12 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Operating Systems & Platforms</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="os-platforms" class="category-content open">
+                    <div id="os-platforms" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="kali linux kali"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div class="skill-name">Kali Linux</div></div>
+                            <div class="skill-card" data-skill="parrot os parrot"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div class="skill-name">Parrot OS</div></div>
+                            <div class="skill-card" data-skill="security onion"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div class="skill-name">Security Onion</div></div>
+                            <div class="skill-card" data-skill="remnux malware"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div class="skill-name">REMnux</div></div>
                             <div class="skill-card" data-skill="windows"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/></svg></span><div class="skill-name">Windows</div></div>
                             <div class="skill-card" data-skill="active directory ad"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="skill-name">Active Directory</div></div>
                         </div>
@@ -1510,7 +1995,7 @@
                         <span class="category-title"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Intelligence & Research</span>
                         <span class="category-arrow">▼</span>
                     </div>
-                    <div id="intelligence" class="category-content open">
+                    <div id="intelligence" class="category-content">
                         <div class="skills-grid">
                             <div class="skill-card" data-skill="osint open source intelligence"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div class="skill-name">OSINT</div></div>
                             <div class="skill-card" data-skill="vulnerability assessment documentation"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" stroke="currentColor" stroke-width="2"/><rect x="8" y="2" width="8" height="4" rx="1" stroke="currentColor" stroke-width="2"/></svg></span><div class="skill-name">Vulnerability Assessment</div></div>
@@ -1567,6 +2052,14 @@
                         <div class="platform-info">
                             <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M16 18l2-2 4 4-4 4-2-2m0-12L14 8l-4-4 4-4 2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                             <span class="platform-name">HackerRank</span>
+                        </div>
+                        <span class="arrow">→</span>
+                    </a>
+
+                    <a href="https://leetcode.com/u/connerswanson/" class="platform-link" target="_blank" rel="noopener" onclick="openLink('https://leetcode.com/u/connerswanson/'); return false;">
+                        <div class="platform-info">
+                            <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0z" stroke="currentColor" stroke-width="0.5" fill="currentColor"/></svg></span>
+                            <span class="platform-name">LeetCode</span>
                         </div>
                         <span class="arrow">→</span>
                     </a>
@@ -1649,6 +2142,288 @@
             </div>
         </div>
     </section>
+
+    <!-- Incident Replay Section -->
+    <section class="incident-replay-section">
+        <div class="incident-container">
+            <h2 class="incident-title">Security Incident Timeline</h2>
+            <p class="incident-subtitle">Scroll through a real-world breach scenario</p>
+            
+            <!-- Perspective Toggle -->
+            <div class="perspective-toggle">
+                <button class="perspective-btn active" data-perspective="attacker">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Attacker
+                </button>
+                <button class="perspective-btn" data-perspective="defender">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Defender
+                </button>
+                <button class="perspective-btn" data-perspective="executive">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/>
+                        <line x1="9" y1="21" x2="9" y2="9" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Executive
+                </button>
+            </div>
+            
+            <div class="timeline-track">
+                <!-- Stage 1: Normal Traffic -->
+                <div class="timeline-stage" data-stage="1">
+                    <div class="stage-number">01</div>
+                    <div class="stage-content">
+                        <h3 class="stage-title">Reconnaissance Phase</h3>
+                        
+                        <!-- Attacker Perspective -->
+                        <div class="perspective-content" data-view="attacker">
+                            <div class="perspective-label">🎯 Attacker View</div>
+                            <div class="log-entries">
+                                <div class="log-entry">09:45:12 - nmap -sV -p- company.com</div>
+                                <div class="log-entry">09:47:33 - Discovered open ports: 22, 80, 443, 3389</div>
+                                <div class="log-entry">10:02:15 - theHarvester -d company.com -b all</div>
+                                <div class="log-entry">10:08:44 - Found 47 employee emails on LinkedIn</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Defender Perspective -->
+                        <div class="perspective-content hidden" data-view="defender">
+                            <div class="perspective-label">🛡️ Defender View</div>
+                            <div class="log-entries">
+                                <div class="log-entry">10:15:23 - Normal user activity detected</div>
+                                <div class="log-entry">10:15:45 - Standard file access patterns</div>
+                                <div class="log-entry">10:16:12 - Routine email traffic</div>
+                            </div>
+                            <div class="detection-note missed">⚠️ No alerts - External scanning not visible from perimeter</div>
+                        </div>
+                        
+                        <!-- Executive Perspective -->
+                        <div class="perspective-content hidden" data-view="executive">
+                            <div class="perspective-label">📊 Executive View</div>
+                            <div class="executive-summary">
+                                <div class="exec-item">
+                                    <strong>Risk Level:</strong> <span class="risk-low">Unknown/Low</span>
+                                </div>
+                                <div class="exec-item">
+                                    <strong>Financial Impact:</strong> $0 (No detection yet)
+                                </div>
+                                <div class="exec-item">
+                                    <strong>Business Impact:</strong> None visible
+                                </div>
+                                <div class="exec-item insight">
+                                    <strong>Reality:</strong> Attacker mapping attack surface - organization unaware
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 2: Anomaly -->
+                <div class="timeline-stage" data-stage="2">
+                    <div class="stage-number">02</div>
+                    <div class="stage-content">
+                        <h3 class="stage-title">Initial Access</h3>
+                        
+                        <!-- Attacker Perspective -->
+                        <div class="perspective-content" data-view="attacker">
+                            <div class="perspective-label">🎯 Attacker View</div>
+                            <div class="log-entries">
+                                <div class="log-entry">14:28:15 - Sent phishing email with credential harvester</div>
+                                <div class="log-entry">14:32:18 - Credentials captured: j.smith@company.com</div>
+                                <div class="log-entry">14:32:45 - Testing login from VPN: ProtonVPN (NL)</div>
+                                <div class="log-entry">14:33:02 - Access granted - MFA not enforced</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Defender Perspective -->
+                        <div class="perspective-content hidden" data-view="defender">
+                            <div class="perspective-label">🛡️ Defender View</div>
+                            <div class="log-entries">
+                                <div class="log-entry warning">14:32:18 - Impossible travel: Login from Netherlands (last seen: Ohio)</div>
+                                <div class="log-entry warning">14:32:45 - Threat intel match: IP on VPN provider list</div>
+                                <div class="log-entry">14:33:02 - Auto-response: Send notification to j.smith@company.com</div>
+                            </div>
+                            <div class="detection-note partial">⚠️ Detected but low-priority - Requires user confirmation to escalate</div>
+                        </div>
+                        
+                        <!-- Executive Perspective -->
+                        <div class="perspective-content hidden" data-view="executive">
+                            <div class="perspective-label">📊 Executive View</div>
+                            <div class="executive-summary">
+                                <div class="exec-item">
+                                    <strong>Risk Level:</strong> <span class="risk-medium">Medium</span>
+                                </div>
+                                <div class="exec-item">
+                                    <strong>Financial Impact:</strong> $2K-5K (Investigation costs if escalated)
+                                </div>
+                                <div class="exec-item">
+                                    <strong>Business Impact:</strong> Single account potentially compromised
+                                </div>
+                                <div class="exec-item insight">
+                                    <strong>Gap:</strong> MFA not enforced org-wide - $15K/year Okta cost deferred
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 3: Exploit -->
+                <div class="timeline-stage" data-stage="3">
+                    <div class="stage-number">03</div>
+                    <div class="stage-content">
+                        <h3 class="stage-title">Exploitation & Exfiltration</h3>
+                        
+                        <!-- Attacker Perspective -->
+                        <div class="perspective-content" data-view="attacker">
+                            <div class="perspective-label">🎯 Attacker View</div>
+                            <div class="log-entries">
+                                <div class="log-entry">15:22:10 - Dropped Sliver C2 beacon on WS-042</div>
+                                <div class="log-entry">15:22:33 - execute-assembly Rubeus.exe dump</div>
+                                <div class="log-entry">15:22:55 - Exfiltrating /shares/finance/ → 2.4GB via HTTPS</div>
+                                <div class="log-entry">15:23:12 - PSExec to DC01 using dumped credentials</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Defender Perspective -->
+                        <div class="perspective-content hidden" data-view="defender">
+                            <div class="perspective-label">🛡️ Defender View</div>
+                            <div class="log-entries">
+                                <div class="log-entry danger">15:22:33 - CrowdStrike: Suspicious .NET assembly execution</div>
+                                <div class="log-entry danger">15:22:55 - Firewall: 2.4GB outbound to unknown IP</div>
+                                <div class="log-entry danger">15:23:12 - Domain Controller: Admin login from workstation (abnormal)</div>
+                            </div>
+                            <div class="detection-note detected">✓ Critical alerts fired - Escalating to Tier 2 analyst</div>
+                        </div>
+                        
+                        <!-- Executive Perspective -->
+                        <div class="perspective-content hidden" data-view="executive">
+                            <div class="perspective-label">📊 Executive View</div>
+                            <div class="executive-summary">
+                                <div class="exec-item">
+                                    <strong>Risk Level:</strong> <span class="risk-critical">Critical</span>
+                                </div>
+                                <div class="exec-item">
+                                    <strong>Financial Impact:</strong> $150K-500K (Data breach response, forensics, legal)
+                                </div>
+                                <div class="exec-item">
+                                    <strong>Business Impact:</strong> Customer financial data exposed
+                                </div>
+                                <div class="exec-item insight">
+                                    <strong>Regulatory:</strong> GDPR/PCI-DSS breach notification likely required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 4: Detection -->
+                <div class="timeline-stage" data-stage="4">
+                    <div class="stage-number">04</div>
+                    <div class="stage-content">
+                        <h3 class="stage-title">Analysis & Response</h3>
+                        
+                        <!-- Attacker Perspective -->
+                        <div class="perspective-content" data-view="attacker">
+                            <div class="perspective-label">🎯 Attacker View</div>
+                            <div class="log-entries">
+                                <div class="log-entry">15:25:00 - Creating scheduled task for persistence</div>
+                                <div class="log-entry">15:25:18 - Deploying secondary C2 channel (DNS tunneling)</div>
+                                <div class="log-entry">15:25:45 - Attempting to disable Windows Defender</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Defender Perspective -->
+                        <div class="perspective-content hidden" data-view="defender">
+                            <div class="perspective-label">🛡️ Defender View</div>
+                            <div class="log-entries">
+                                <div class="log-entry">15:25:00 - Incident #2847 escalated to senior analyst</div>
+                                <div class="log-entry">15:25:18 - Isolating WS-042 from network (EDR quarantine)</div>
+                                <div class="log-entry">15:25:45 - Blocking C2 IP at firewall: 185.220.101.45</div>
+                                <div class="log-entry">15:26:12 - Disabling compromised account j.smith@company.com</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Executive Perspective -->
+                        <div class="perspective-content hidden" data-view="executive">
+                            <div class="perspective-label">📊 Executive View</div>
+                            <div class="executive-summary">
+                                <div class="exec-item">
+                                    <strong>Risk:</strong> <span class="risk-high">High (Decreasing)</span>
+                                </div>
+                                <div class="exec-item">
+                                    <strong>Cost:</strong> $25K (IR team, overtime, forensics)
+                                </div>
+                                <div class="exec-item insight">
+                                    <strong>Timeline:</strong> 3min from alert to containment
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 5: Containment -->
+                <div class="timeline-stage" data-stage="5">
+                    <div class="stage-number">05</div>
+                    <div class="stage-content">
+                        <h3 class="stage-title">Containment & Recovery</h3>
+                        
+                        <!-- Attacker Perspective -->
+                        <div class="perspective-content" data-view="attacker">
+                            <div class="perspective-label">🎯 Attacker View</div>
+                            <div class="log-entries">
+                                <div class="log-entry">15:30:12 - All C2 connections terminated</div>
+                                <div class="log-entry">15:31:05 - Persistence mechanisms removed by defender</div>
+                                <div class="log-entry">15:35:22 - Complete loss of access to target network</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Defender Perspective -->
+                        <div class="perspective-content hidden" data-view="defender">
+                            <div class="perspective-label">🛡️ Defender View</div>
+                            <div class="log-entries">
+                                <div class="log-entry success">15:30:12 - Threat actor evicted, all indicators cleared</div>
+                                <div class="log-entry success">15:31:05 - 3 systems reimaged, credentials rotated</div>
+                                <div class="log-entry success">15:35:22 - MFA rollout accelerated to all users</div>
+                                <div class="log-entry success">15:42:15 - IOCs shared with ISAC</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Executive Perspective -->
+                        <div class="perspective-content hidden" data-view="executive">
+                            <div class="perspective-label">📊 Executive View</div>
+                            <div class="executive-summary">
+                                <div class="exec-item">
+                                    <strong>Risk:</strong> <span class="risk-medium">Medium (Contained)</span>
+                                </div>
+                                <div class="exec-item">
+                                    <strong>Total Cost:</strong> $380K (IR, Legal, Notification, Forensics)
+                                </div>
+                                <div class="exec-item">
+                                    <strong>Data Lost:</strong> 2.4GB customer financial records
+                                </div>
+                                <div class="exec-item insight">
+                                    <strong>Lesson:</strong> $15K/year MFA vs $380K breach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Footer -->
+    <footer class="contact-section">
+        <div class="contact-container">
+            <p>contact@csecurity.dev | © 2025</p>
+        </div>
+    </footer>
 
     <script>
         // Particle System - MUST BE DECLARED FIRST
@@ -2108,26 +2883,81 @@
             const star = document.createElement('div');
             star.className = 'shooting-star';
             
-            // Random starting position (top or right edge)
-            const startFromTop = Math.random() > 0.5;
-            if (startFromTop) {
-                star.style.left = Math.random() * window.innerWidth + 'px';
-                star.style.top = '0px';
-            } else {
-                star.style.left = window.innerWidth + 'px';
-                star.style.top = Math.random() * (window.innerHeight / 2) + 'px';
-            }
+            // Start from left side at random height
+            star.style.left = '0px';
+            star.style.top = Math.random() * window.innerHeight + 'px';
             
-            star.style.animation = 'shootingStar 1.5s linear forwards';
+            star.style.animation = 'shootingStar 2s linear forwards';
             
             if (particleContainer) {
                 particleContainer.appendChild(star);
-                setTimeout(() => star.remove(), 1500);
+                setTimeout(() => star.remove(), 2000);
             }
         }
 
-        // Create shooting star every 30 seconds
-        setInterval(createShootingStar, 30000);
+        // Create shooting star every 10 seconds (was 30)
+        setInterval(createShootingStar, 10000);
+
+        // Incident Replay Scroll Animation
+        function handleIncidentScroll() {
+            const stages = document.querySelectorAll('.timeline-stage');
+            const windowHeight = window.innerHeight;
+            
+            stages.forEach((stage, index) => {
+                const rect = stage.getBoundingClientRect();
+                const stageMiddle = rect.top + rect.height / 2;
+                
+                // Activate when stage is in the middle 50% of viewport
+                if (stageMiddle > windowHeight * 0.25 && stageMiddle < windowHeight * 0.75) {
+                    stage.classList.add('active');
+                } else {
+                    stage.classList.remove('active');
+                }
+            });
+        }
+
+        // Add scroll listener for incident replay
+        window.addEventListener('scroll', handleIncidentScroll);
+        window.addEventListener('load', handleIncidentScroll);
+
+        // Perspective Toggle for Incident Replay
+        const perspectiveButtons = document.querySelectorAll('.perspective-btn');
+        let currentPerspective = 'attacker';
+
+        perspectiveButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const perspective = btn.getAttribute('data-perspective');
+                
+                // Update active button
+                perspectiveButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update visible content
+                currentPerspective = perspective;
+                updatePerspectiveView(perspective);
+            });
+        });
+
+        function updatePerspectiveView(perspective) {
+            const allContent = document.querySelectorAll('.perspective-content');
+            
+            allContent.forEach(content => {
+                const contentView = content.getAttribute('data-view');
+                
+                if (contentView === perspective) {
+                    content.classList.remove('hidden');
+                    // Fade in
+                    setTimeout(() => {
+                        content.style.opacity = '1';
+                        content.style.transform = 'translateY(0)';
+                    }, 10);
+                } else {
+                    content.classList.add('hidden');
+                    content.style.opacity = '0';
+                    content.style.transform = 'translateY(10px)';
+                }
+            });
+        }
 
         // Mouse interaction with particles
         let mousePos = { x: 0, y: 0 };
