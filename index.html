@@ -1663,15 +1663,31 @@
                 settingsBtn.style.cssText = 'position: fixed !important; top: 5px !important; right: 15px !important; z-index: 9999 !important;';
             }
             
-            // Ensure platform links work with direct click handlers
+            // Debug and ensure platform links work
             const platformLinks = document.querySelectorAll('.platform-link');
-            platformLinks.forEach(link => {
+            console.log('Found platform links:', platformLinks.length);
+            
+            platformLinks.forEach((link, index) => {
+                const href = link.getAttribute('href');
+                const name = link.querySelector('.platform-name')?.textContent;
+                console.log(`Link ${index}: ${name} -> ${href}`);
+                
+                // Add click handler
                 link.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (href) {
-                        window.open(href, '_blank', 'noopener,noreferrer');
+                    console.log(`Clicked: ${name}`);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const url = this.getAttribute('href');
+                    if (url) {
+                        console.log(`Opening: ${url}`);
+                        window.open(url, '_blank', 'noopener,noreferrer');
                     }
                 });
+                
+                // Make sure link is visible and clickable
+                link.style.pointerEvents = 'auto';
+                link.style.cursor = 'pointer';
             });
         });
         
@@ -1736,17 +1752,26 @@
         // Connect settings slider to color updates
         const settingsColorInput = document.getElementById('settingsColorInput');
         if (settingsColorInput) {
-            settingsColorInput.addEventListener('input', (e) => {
-                updateColors(e.target.value);
-                localStorage.setItem('accentColor', e.target.value);
-            });
-            
-            // Load and apply saved color
+            // Load saved color first
             const savedColor = localStorage.getItem('accentColor');
+            console.log('Loaded saved color:', savedColor);
+            
             if (savedColor) {
                 settingsColorInput.value = savedColor;
-                updateColors(parseInt(savedColor));
+                // Small delay to ensure everything is loaded
+                setTimeout(() => {
+                    updateColors(parseInt(savedColor));
+                    console.log('Applied saved color:', savedColor);
+                }, 100);
             }
+            
+            // Save on change
+            settingsColorInput.addEventListener('input', (e) => {
+                const colorValue = e.target.value;
+                updateColors(colorValue);
+                localStorage.setItem('accentColor', colorValue);
+                console.log('Saved color:', colorValue);
+            });
         }
         
         // Apply saved particles state on load
