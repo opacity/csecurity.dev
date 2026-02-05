@@ -11,6 +11,28 @@
             --accent-color: var(--accent-color);
         }
 
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: rgba(255, 255, 255, 0.02);
+            --bg-tertiary: rgba(255, 255, 255, 0.03);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.9);
+            --text-tertiary: rgba(255, 255, 255, 0.6);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --border-color-hover: rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-mode {
+            --bg-primary: #ffffff;
+            --bg-secondary: rgba(0, 0, 0, 0.04);
+            --bg-tertiary: rgba(0, 0, 0, 0.06);
+            --text-primary: #000000;
+            --text-secondary: rgba(0, 0, 0, 0.85);
+            --text-tertiary: rgba(0, 0, 0, 0.65);
+            --border-color: rgba(0, 0, 0, 0.2);
+            --border-color-hover: rgba(0, 0, 0, 0.35);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -19,16 +41,32 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #000000;
-            color: #ffffff;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
             display: block;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             padding: 0;
             margin: 0;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background-color 0.5s ease, color 0.5s ease;
             scroll-behavior: smooth;
+            position: relative;
+        }
+
+        body.light-mode::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, var(--accent-color) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, var(--accent-color) 0%, transparent 40%);
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Main Landing - Full viewport height */
@@ -224,6 +262,13 @@
             opacity: 0.5;
         }
 
+        body.light-mode .particle {
+            opacity: 1;
+            filter: blur(0.1px) drop-shadow(0 0 2px rgba(0,0,0,0.3));
+            box-shadow: 0 0 15px var(--accent-color), 0 0 25px var(--accent-color);
+            transform: scale(1.3);
+        }
+
         /* Shooting star */
         .shooting-star {
             position: absolute;
@@ -233,6 +278,12 @@
             border-radius: 50%;
             pointer-events: none;
             box-shadow: 0 0 15px var(--accent-color), 0 0 30px var(--accent-color);
+        }
+
+        body.light-mode .shooting-star {
+            box-shadow: 0 0 25px var(--accent-color), 0 0 50px var(--accent-color), 0 0 75px var(--accent-color);
+            width: 5px;
+            height: 5px;
         }
 
         @keyframes shootingStar {
@@ -354,7 +405,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 0.75rem 0;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-secondary);
             font-size: 0.9rem;
         }
 
@@ -362,6 +413,24 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+        }
+
+        /* Contact Footer */
+        .contact-section {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .contact-container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .contact-container p {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
         }
 
         /* Simple toggle circle */
@@ -376,6 +445,10 @@
             transition: all 0.3s ease;
         }
 
+        body.light-mode .toggle-circle {
+            border: 1px solid rgba(0, 0, 0, 0.3);
+        }
+
         .toggle-circle::after {
             content: '';
             position: absolute;
@@ -386,6 +459,10 @@
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.8);
             transition: all 0.3s ease;
+        }
+
+        body.light-mode .toggle-circle::after {
+            background: rgba(0, 0, 0, 0.6);
         }
 
         .toggle-circle.active::after {
@@ -401,6 +478,10 @@
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+        }
+
+        body.light-mode .color-select-btn {
+            border: 1px solid rgba(0, 0, 0, 0.3);
         }
 
         .color-select-btn:hover {
@@ -554,16 +635,30 @@
         }
 
         /* Logo */
+        .logo-container {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
         .logo {
             font-size: clamp(2.5rem, 6vw, 3.5rem);
             font-weight: 700;
             letter-spacing: -0.03em;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff 0%, var(--accent-color, 0.9) 100%);
+            margin-bottom: 0;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-color) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.6s ease;
+        }
+
+        body.light-mode .logo {
+            background: linear-gradient(135deg, #333333 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .typewriter {
@@ -574,24 +669,28 @@
         .logo-cursor {
             color: var(--accent-color);
             animation: blink 1s infinite;
-            -webkit-text-fill-color: var(--accent-color);
+            font-weight: 300;
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            display: inline-block;
+            margin-left: 4px;
+            vertical-align: baseline;
+        }
+
+        body.light-mode .logo-cursor {
+            color: var(--accent-color);
         }
 
         @keyframes blink {
-            0%, 50% {
-                opacity: 1;
-            }
-            51%, 100% {
-                opacity: 0;
-            }
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
 
         .tagline {
             font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--text-tertiary);
             margin-bottom: 2rem;
             font-weight: 400;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.6s ease;
         }
 
         /* Status badge */
@@ -640,27 +739,31 @@
 
         .tab {
             padding: 0.75rem 1.5rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--text-tertiary);
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             font-size: 0.95rem;
             font-weight: 500;
         }
 
         .tab:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.9);
+            background: var(--bg-secondary);
+            border-color: var(--border-color-hover);
+            color: var(--text-secondary);
             transform: translateY(-2px);
         }
 
         .tab.active {
-            background: linear-gradient(135deg, var(--accent-color, 0.2), var(--accent-color, 0.3));
-            border-color: var(--accent-color, 0.3);
-            color: rgba(255, 255, 255, 0.95);
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #000000;
+        }
+
+        body.light-mode .tab.active {
+            box-shadow: 0 4px 16px var(--accent-color);
         }
 
         /* Content panels */
@@ -712,22 +815,22 @@
             width: 100%;
             max-width: 500px;
             padding: 1rem 1.5rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
             border-radius: 20px;
-            color: #ffffff;
+            color: var(--text-primary);
             font-size: 1rem;
             outline: none;
             transition: all 0.3s ease;
         }
 
         .skills-search input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-tertiary);
         }
 
         .skills-search input:focus {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--accent-color, 0.3);
+            background: var(--bg-secondary);
+            border-color: var(--accent-color);
         }
 
         .skill-category {
@@ -739,8 +842,8 @@
             align-items: center;
             justify-content: space-between;
             padding: 1.25rem 1.5rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -748,8 +851,8 @@
         }
 
         .category-header:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--accent-color, 0.2);
+            background: var(--bg-secondary);
+            border-color: var(--accent-color);
         }
 
         .category-header:active {
@@ -759,11 +862,11 @@
         .category-title {
             font-size: 1.1rem;
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-secondary);
         }
 
         .category-arrow {
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--text-tertiary);
             transition: transform 0.3s ease;
         }
 
@@ -796,8 +899,8 @@
 
         .skill-card {
             padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
             border-radius: 20px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
@@ -893,7 +996,7 @@
 
         .skill-name {
             font-size: 0.95rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
             font-weight: 500;
             text-align: center;
             width: 100%;
@@ -911,8 +1014,8 @@
             align-items: center;
             justify-content: space-between;
             padding: 1.25rem 1.75rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
             border-radius: 20px;
             text-decoration: none;
             color: inherit;
@@ -951,8 +1054,8 @@
         }
 
         .platform-link:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: var(--accent-color, 0.3);
+            background: var(--bg-secondary);
+            border-color: var(--accent-color);
             transform: translateX(8px);
         }
 
@@ -967,7 +1070,7 @@
         .platform-name {
             font-size: 1.05rem;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-secondary);
             position: relative;
             z-index: 2;
         }
@@ -978,7 +1081,7 @@
         }
 
         .arrow {
-            color: rgba(255, 255, 255, 0.3);
+            color: var(--text-tertiary);
             font-size: 1.25rem;
             transition: all 0.3s ease;
             position: relative;
@@ -986,7 +1089,7 @@
         }
 
         .platform-link:hover .arrow {
-            color: var(--accent-color, 0.8);
+            color: var(--accent-color);
             transform: translateX(4px);
         }
 
@@ -994,14 +1097,14 @@
         .about-content {
             margin-top: 2rem;
             padding: 2rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
             border-radius: 24px;
         }
 
         .about-text {
             font-size: 1.05rem;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-secondary);
             line-height: 1.8;
         }
 
@@ -1029,483 +1132,39 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1rem;
-            padding: 1.5rem;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 16px;
+            padding: 1rem 0;
+            background: transparent;
+            border-radius: 0;
             margin-top: 1rem;
             width: 100%;
+            border: none;
         }
 
         .cert-card {
             padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
             text-align: center;
             transition: all 0.3s ease;
         }
 
         .cert-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: var(--accent-color, 0.3);
-            transform: translateY(-4px);
+            background: var(--bg-tertiary);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
         }
 
         .cert-name {
             font-size: 1rem;
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-secondary);
             margin-bottom: 0.5rem;
         }
 
         .cert-issuer {
             font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        /* Incident Replay Section */
-        .incident-replay-section {
-            padding: 4rem 2rem;
-            position: relative;
-        }
-
-        .incident-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .incident-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #ffffff 0%, var(--accent-color) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .incident-subtitle {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
-
-        /* Perspective Toggle */
-        .perspective-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .perspective-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .perspective-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .perspective-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .perspective-btn.active {
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-            color: #000000;
-            font-weight: 600;
-        }
-
-        .perspective-btn.active svg {
-            stroke: #000000;
-        }
-
-        /* Perspective Content */
-        .perspective-content {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-
-        .perspective-content.hidden {
-            display: none;
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        .perspective-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Detection Notes */
-        .detection-note {
-            margin-top: 1rem;
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .detection-note.missed {
-            background: rgba(255, 100, 100, 0.1);
-            border: 1px solid rgba(255, 100, 100, 0.3);
-            color: #ff6464;
-        }
-
-        .detection-note.partial {
-            background: rgba(255, 200, 0, 0.1);
-            border: 1px solid rgba(255, 200, 0, 0.3);
-            color: #ffc800;
-        }
-
-        .detection-note.detected {
-            background: rgba(0, 255, 100, 0.1);
-            border: 1px solid rgba(0, 255, 100, 0.3);
-            color: #00ff64;
-        }
-
-        /* Executive Summary */
-        .executive-summary {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 1.5rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .exec-item {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .exec-item strong {
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-        }
-
-        .exec-item.insight {
-            padding-left: 1rem;
-            border-left: 3px solid var(--accent-color);
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .risk-low { color: #00ff64; font-weight: 600; }
-        .risk-medium { color: #ffc800; font-weight: 600; }
-        .risk-high { color: #ff8800; font-weight: 600; }
-        .risk-critical { color: #ff3232; font-weight: 600; }
-
-        .timeline-track {
-            display: flex;
-            flex-direction: column;
-            gap: 2.5rem;
-            position: relative;
-            padding-left: 80px;
-        }
-
-        /* Roadmap Line */
-        .timeline-track::before {
-            content: '';
-            position: absolute;
-            left: 30px;
-            top: 0;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(180deg, 
-                transparent 0%,
-                var(--accent-color) 10%,
-                var(--accent-color) 90%,
-                transparent 100%
-            );
-            opacity: 0.3;
-        }
-
-        .timeline-stage {
-            opacity: 0.3;
-            transform: translateX(20px);
-            transition: all 0.6s ease;
-            padding: 1.2rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            position: relative;
-        }
-
-        .timeline-stage::before {
-            content: '';
-            position: absolute;
-            left: -50px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 10px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            border: 2px solid var(--accent-color);
-            border-radius: 50%;
-            transition: all 0.6s ease;
-        }
-
-        .timeline-stage.active {
-            opacity: 1;
-            transform: translateX(0);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px rgba(var(--accent-color-rgb, 59, 130, 246), 0.15);
-        }
-
-        .timeline-stage.active::before {
-            background: var(--accent-color);
-            width: 16px;
-            height: 16px;
-            box-shadow: 0 0 15px var(--accent-color);
-        }
-
-        .stage-number {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            opacity: 0.3;
-            margin-bottom: 0.3rem;
-        }
-
-        .timeline-stage.active .stage-number {
-            opacity: 1;
-        }
-
-        .stage-title {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .stage-visual {
-            margin-bottom: 1rem;
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Traffic Flow Animation */
-        .traffic-flow {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .traffic-line {
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .timeline-stage.active .traffic-line::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 30%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-            animation: traffic-flow 2s infinite;
-        }
-
-        @keyframes traffic-flow {
-            to {
-                left: 100%;
-            }
-        }
-
-        .traffic-line.suspicious::after {
-            background: linear-gradient(90deg, transparent, rgba(255, 200, 0, 0.8), transparent);
-        }
-
-        .traffic-line.danger::after {
-            background: linear-gradient(90deg, transparent, rgba(255, 50, 50, 0.8), transparent);
-            animation: traffic-flow 0.8s infinite;
-        }
-
-        /* SOC Dashboard */
-        .soc-dashboard {
-            width: 100%;
-            padding: 1.5rem;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        .alert-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .alert-item {
-            padding: 0.8rem 1rem;
-            background: rgba(255, 50, 50, 0.1);
-            border-left: 3px solid #ff3232;
-            color: rgba(255, 255, 255, 0.9);
-            border-radius: 4px;
-        }
-
-        .timeline-stage.active .alert-item {
-            animation: pulse-alert 2s infinite;
-        }
-
-        @keyframes pulse-alert {
-            0%, 100% {
-                background: rgba(255, 50, 50, 0.1);
-            }
-            50% {
-                background: rgba(255, 50, 50, 0.2);
-            }
-        }
-
-        /* Containment Actions */
-        .containment-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .action-item {
-            padding: 1rem 1.5rem;
-            background: rgba(0, 255, 100, 0.05);
-            border-left: 3px solid #00ff64;
-            color: rgba(255, 255, 255, 0.9);
-            border-radius: 4px;
-            opacity: 0;
-            transform: translateX(-20px);
-            transition: all 0.5s ease;
-        }
-
-        .timeline-stage.active .action-item {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .timeline-stage.active .action-item:nth-child(1) { transition-delay: 0.2s; }
-        .timeline-stage.active .action-item:nth-child(2) { transition-delay: 0.4s; }
-        .timeline-stage.active .action-item:nth-child(3) { transition-delay: 0.6s; }
-        .timeline-stage.active .action-item:nth-child(4) { transition-delay: 0.8s; }
-
-        /* Log Entries */
-        .log-entries {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-        }
-
-        .log-entry {
-            padding: 0.4rem;
-            color: rgba(255, 255, 255, 0.7);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .timeline-stage.active .log-entry {
-            animation: typewriter 1s steps(60) forwards;
-            width: 0;
-        }
-
-        .timeline-stage.active .log-entry:nth-child(1) {
-            animation-delay: 0.2s;
-        }
-
-        .timeline-stage.active .log-entry:nth-child(2) {
-            animation-delay: 0.8s;
-        }
-
-        .timeline-stage.active .log-entry:nth-child(3) {
-            animation-delay: 1.4s;
-        }
-
-        @keyframes typewriter {
-            to {
-                width: 100%;
-            }
-        }
-
-        .log-entry:last-child {
-            border-bottom: none;
-        }
-
-        .log-entry.warning {
-            color: #ffa500;
-        }
-
-        .log-entry.danger {
-            color: #ff3232;
-            font-weight: bold;
-        }
-
-        .log-entry.success {
-            color: #00ff64;
-        }
-
-        /* Alert Badges */
-        .alert-badge {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .alert-badge.critical {
-            background: rgba(255, 50, 50, 0.2);
-            border: 2px solid #ff3232;
-            color: #ff3232;
-        }
-
-        .timeline-stage.active .alert-badge.critical {
-            animation: pulse-badge 1s infinite;
-        }
-
-        @keyframes pulse-badge {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        .alert-badge.resolved {
-            background: rgba(0, 255, 100, 0.2);
-            border: 2px solid #00ff64;
-            color: #00ff64;
+            color: var(--text-tertiary);
         }
 
         /* Contact Footer */
@@ -1522,7 +1181,7 @@
         }
 
         .contact-container p {
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-tertiary);
             font-size: 0.9rem;
         }
 
@@ -1568,13 +1227,19 @@
         .terminal-container {
             width: 100%;
             max-width: 900px;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             font-family: 'Courier New', monospace;
+        }
+
+        body.light-mode .terminal-container {
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
         }
 
         .terminal-header {
@@ -1619,7 +1284,7 @@
 
         .terminal-body {
             padding: 1.5rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
             font-size: 0.95rem;
             line-height: 1.8;
             min-height: 400px;
@@ -1744,6 +1409,13 @@
             
             <div class="settings-section">
                 <div class="settings-item">
+                    <span>Light Mode</span>
+                    <div class="toggle-circle" id="lightModeToggle" onclick="toggleLightMode()"></div>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <div class="settings-item">
                     <span>Colors</span>
                     <div class="color-select-btn" onclick="toggleColorSliderInSettings()" id="colorPreview"></div>
                 </div>
@@ -1764,7 +1436,10 @@
         <div class="container">
         <div class="header-section">
             <div class="content">
-                <h1 class="logo"><span class="typewriter" id="typewriter"></span><span class="logo-cursor" id="logoCursor">_</span></h1>
+                <div class="logo-container">
+                    <h1 class="logo"><span class="typewriter" id="typewriter"></span></h1>
+                    <span class="logo-cursor" id="logoCursor">_</span>
+                </div>
                 <p class="tagline">contact@csecurity.dev</p>
                 
                 <div class="status">
@@ -2064,7 +1739,7 @@
                         <span class="arrow">→</span>
                     </a>
 
-                    <div class="platform-link" onclick="alert('HackTheBox clicked!'); window.open('https://ctf.hackthebox.com/user/profile/948092', '_blank', 'noopener,noreferrer');" style="cursor: pointer;">
+                    <div class="platform-link" onclick="alert('HackTheBox clicked!'); window.open('https://app.hackthebox.com/users/1269159', '_blank', 'noopener,noreferrer');" style="cursor: pointer;">
                         <div class="platform-info">
                             <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="2"/><polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
                             <span class="platform-name">HackTheBox</span>
@@ -2138,281 +1813,6 @@
                     <span class="terminal-prompt">csecurity@comman.ds:~$</span>
                     <span id="currentInput"></span>
                     <span class="terminal-cursor">_</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Incident Replay Section -->
-    <section class="incident-replay-section">
-        <div class="incident-container">
-            <h2 class="incident-title">Security Incident Timeline</h2>
-            <p class="incident-subtitle">Scroll through a real-world breach scenario</p>
-            
-            <!-- Perspective Toggle -->
-            <div class="perspective-toggle">
-                <button class="perspective-btn active" data-perspective="attacker">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Attacker
-                </button>
-                <button class="perspective-btn" data-perspective="defender">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Defender
-                </button>
-                <button class="perspective-btn" data-perspective="executive">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-                        <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/>
-                        <line x1="9" y1="21" x2="9" y2="9" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                    Executive
-                </button>
-            </div>
-            
-            <div class="timeline-track">
-                <!-- Stage 1: Normal Traffic -->
-                <div class="timeline-stage" data-stage="1">
-                    <div class="stage-number">01</div>
-                    <div class="stage-content">
-                        <h3 class="stage-title">Reconnaissance Phase</h3>
-                        
-                        <!-- Attacker Perspective -->
-                        <div class="perspective-content" data-view="attacker">
-                            <div class="perspective-label">🎯 Attacker View</div>
-                            <div class="log-entries">
-                                <div class="log-entry">09:45:12 - nmap -sV -p- company.com</div>
-                                <div class="log-entry">09:47:33 - Discovered open ports: 22, 80, 443, 3389</div>
-                                <div class="log-entry">10:02:15 - theHarvester -d company.com -b all</div>
-                                <div class="log-entry">10:08:44 - Found 47 employee emails on LinkedIn</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Defender Perspective -->
-                        <div class="perspective-content hidden" data-view="defender">
-                            <div class="perspective-label">🛡️ Defender View</div>
-                            <div class="log-entries">
-                                <div class="log-entry">10:15:23 - Normal user activity detected</div>
-                                <div class="log-entry">10:15:45 - Standard file access patterns</div>
-                                <div class="log-entry">10:16:12 - Routine email traffic</div>
-                            </div>
-                            <div class="detection-note missed">⚠️ No alerts - External scanning not visible from perimeter</div>
-                        </div>
-                        
-                        <!-- Executive Perspective -->
-                        <div class="perspective-content hidden" data-view="executive">
-                            <div class="perspective-label">📊 Executive View</div>
-                            <div class="executive-summary">
-                                <div class="exec-item">
-                                    <strong>Risk Level:</strong> <span class="risk-low">Unknown/Low</span>
-                                </div>
-                                <div class="exec-item">
-                                    <strong>Financial Impact:</strong> $0 (No detection yet)
-                                </div>
-                                <div class="exec-item">
-                                    <strong>Business Impact:</strong> None visible
-                                </div>
-                                <div class="exec-item insight">
-                                    <strong>Reality:</strong> Attacker mapping attack surface - organization unaware
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stage 2: Anomaly -->
-                <div class="timeline-stage" data-stage="2">
-                    <div class="stage-number">02</div>
-                    <div class="stage-content">
-                        <h3 class="stage-title">Initial Access</h3>
-                        
-                        <!-- Attacker Perspective -->
-                        <div class="perspective-content" data-view="attacker">
-                            <div class="perspective-label">🎯 Attacker View</div>
-                            <div class="log-entries">
-                                <div class="log-entry">14:28:15 - Sent phishing email with credential harvester</div>
-                                <div class="log-entry">14:32:18 - Credentials captured: j.smith@company.com</div>
-                                <div class="log-entry">14:32:45 - Testing login from VPN: ProtonVPN (NL)</div>
-                                <div class="log-entry">14:33:02 - Access granted - MFA not enforced</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Defender Perspective -->
-                        <div class="perspective-content hidden" data-view="defender">
-                            <div class="perspective-label">🛡️ Defender View</div>
-                            <div class="log-entries">
-                                <div class="log-entry warning">14:32:18 - Impossible travel: Login from Netherlands (last seen: Ohio)</div>
-                                <div class="log-entry warning">14:32:45 - Threat intel match: IP on VPN provider list</div>
-                                <div class="log-entry">14:33:02 - Auto-response: Send notification to j.smith@company.com</div>
-                            </div>
-                            <div class="detection-note partial">⚠️ Detected but low-priority - Requires user confirmation to escalate</div>
-                        </div>
-                        
-                        <!-- Executive Perspective -->
-                        <div class="perspective-content hidden" data-view="executive">
-                            <div class="perspective-label">📊 Executive View</div>
-                            <div class="executive-summary">
-                                <div class="exec-item">
-                                    <strong>Risk Level:</strong> <span class="risk-medium">Medium</span>
-                                </div>
-                                <div class="exec-item">
-                                    <strong>Financial Impact:</strong> $2K-5K (Investigation costs if escalated)
-                                </div>
-                                <div class="exec-item">
-                                    <strong>Business Impact:</strong> Single account potentially compromised
-                                </div>
-                                <div class="exec-item insight">
-                                    <strong>Gap:</strong> MFA not enforced org-wide - $15K/year Okta cost deferred
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stage 3: Exploit -->
-                <div class="timeline-stage" data-stage="3">
-                    <div class="stage-number">03</div>
-                    <div class="stage-content">
-                        <h3 class="stage-title">Exploitation & Exfiltration</h3>
-                        
-                        <!-- Attacker Perspective -->
-                        <div class="perspective-content" data-view="attacker">
-                            <div class="perspective-label">🎯 Attacker View</div>
-                            <div class="log-entries">
-                                <div class="log-entry">15:22:10 - Dropped Sliver C2 beacon on WS-042</div>
-                                <div class="log-entry">15:22:33 - execute-assembly Rubeus.exe dump</div>
-                                <div class="log-entry">15:22:55 - Exfiltrating /shares/finance/ → 2.4GB via HTTPS</div>
-                                <div class="log-entry">15:23:12 - PSExec to DC01 using dumped credentials</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Defender Perspective -->
-                        <div class="perspective-content hidden" data-view="defender">
-                            <div class="perspective-label">🛡️ Defender View</div>
-                            <div class="log-entries">
-                                <div class="log-entry danger">15:22:33 - CrowdStrike: Suspicious .NET assembly execution</div>
-                                <div class="log-entry danger">15:22:55 - Firewall: 2.4GB outbound to unknown IP</div>
-                                <div class="log-entry danger">15:23:12 - Domain Controller: Admin login from workstation (abnormal)</div>
-                            </div>
-                            <div class="detection-note detected">✓ Critical alerts fired - Escalating to Tier 2 analyst</div>
-                        </div>
-                        
-                        <!-- Executive Perspective -->
-                        <div class="perspective-content hidden" data-view="executive">
-                            <div class="perspective-label">📊 Executive View</div>
-                            <div class="executive-summary">
-                                <div class="exec-item">
-                                    <strong>Risk Level:</strong> <span class="risk-critical">Critical</span>
-                                </div>
-                                <div class="exec-item">
-                                    <strong>Financial Impact:</strong> $150K-500K (Data breach response, forensics, legal)
-                                </div>
-                                <div class="exec-item">
-                                    <strong>Business Impact:</strong> Customer financial data exposed
-                                </div>
-                                <div class="exec-item insight">
-                                    <strong>Regulatory:</strong> GDPR/PCI-DSS breach notification likely required
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stage 4: Detection -->
-                <div class="timeline-stage" data-stage="4">
-                    <div class="stage-number">04</div>
-                    <div class="stage-content">
-                        <h3 class="stage-title">Analysis & Response</h3>
-                        
-                        <!-- Attacker Perspective -->
-                        <div class="perspective-content" data-view="attacker">
-                            <div class="perspective-label">🎯 Attacker View</div>
-                            <div class="log-entries">
-                                <div class="log-entry">15:25:00 - Creating scheduled task for persistence</div>
-                                <div class="log-entry">15:25:18 - Deploying secondary C2 channel (DNS tunneling)</div>
-                                <div class="log-entry">15:25:45 - Attempting to disable Windows Defender</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Defender Perspective -->
-                        <div class="perspective-content hidden" data-view="defender">
-                            <div class="perspective-label">🛡️ Defender View</div>
-                            <div class="log-entries">
-                                <div class="log-entry">15:25:00 - Incident #2847 escalated to senior analyst</div>
-                                <div class="log-entry">15:25:18 - Isolating WS-042 from network (EDR quarantine)</div>
-                                <div class="log-entry">15:25:45 - Blocking C2 IP at firewall: 185.220.101.45</div>
-                                <div class="log-entry">15:26:12 - Disabling compromised account j.smith@company.com</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Executive Perspective -->
-                        <div class="perspective-content hidden" data-view="executive">
-                            <div class="perspective-label">📊 Executive View</div>
-                            <div class="executive-summary">
-                                <div class="exec-item">
-                                    <strong>Risk:</strong> <span class="risk-high">High (Decreasing)</span>
-                                </div>
-                                <div class="exec-item">
-                                    <strong>Cost:</strong> $25K (IR team, overtime, forensics)
-                                </div>
-                                <div class="exec-item insight">
-                                    <strong>Timeline:</strong> 3min from alert to containment
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stage 5: Containment -->
-                <div class="timeline-stage" data-stage="5">
-                    <div class="stage-number">05</div>
-                    <div class="stage-content">
-                        <h3 class="stage-title">Containment & Recovery</h3>
-                        
-                        <!-- Attacker Perspective -->
-                        <div class="perspective-content" data-view="attacker">
-                            <div class="perspective-label">🎯 Attacker View</div>
-                            <div class="log-entries">
-                                <div class="log-entry">15:30:12 - All C2 connections terminated</div>
-                                <div class="log-entry">15:31:05 - Persistence mechanisms removed by defender</div>
-                                <div class="log-entry">15:35:22 - Complete loss of access to target network</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Defender Perspective -->
-                        <div class="perspective-content hidden" data-view="defender">
-                            <div class="perspective-label">🛡️ Defender View</div>
-                            <div class="log-entries">
-                                <div class="log-entry success">15:30:12 - Threat actor evicted, all indicators cleared</div>
-                                <div class="log-entry success">15:31:05 - 3 systems reimaged, credentials rotated</div>
-                                <div class="log-entry success">15:35:22 - MFA rollout accelerated to all users</div>
-                                <div class="log-entry success">15:42:15 - IOCs shared with ISAC</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Executive Perspective -->
-                        <div class="perspective-content hidden" data-view="executive">
-                            <div class="perspective-label">📊 Executive View</div>
-                            <div class="executive-summary">
-                                <div class="exec-item">
-                                    <strong>Risk:</strong> <span class="risk-medium">Medium (Contained)</span>
-                                </div>
-                                <div class="exec-item">
-                                    <strong>Total Cost:</strong> $380K (IR, Legal, Notification, Forensics)
-                                </div>
-                                <div class="exec-item">
-                                    <strong>Data Lost:</strong> 2.4GB customer financial records
-                                </div>
-                                <div class="exec-item insight">
-                                    <strong>Lesson:</strong> $15K/year MFA vs $380K breach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -2506,6 +1906,33 @@
             // Save to localStorage
             localStorage.setItem('particlesEnabled', particlesEnabled);
         }
+
+        // Light Mode Toggle
+        let lightMode = localStorage.getItem('lightMode') === 'true' || false;
+
+        function toggleLightMode() {
+            lightMode = !lightMode;
+            const toggle = document.getElementById('lightModeToggle');
+            
+            toggle.classList.toggle('active');
+            
+            if (lightMode) {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+            
+            localStorage.setItem('lightMode', lightMode);
+        }
+
+        // Apply saved light mode on load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (lightMode) {
+                document.body.classList.add('light-mode');
+                const toggle = document.getElementById('lightModeToggle');
+                if (toggle) toggle.classList.add('active');
+            }
+        });
 
         // Update color preview button when color changes
         function updateColorPreview() {
@@ -2898,45 +2325,6 @@
         // Create shooting star every 10 seconds (was 30)
         setInterval(createShootingStar, 10000);
 
-        // Incident Replay Scroll Animation
-        function handleIncidentScroll() {
-            const stages = document.querySelectorAll('.timeline-stage');
-            const windowHeight = window.innerHeight;
-            
-            stages.forEach((stage, index) => {
-                const rect = stage.getBoundingClientRect();
-                const stageMiddle = rect.top + rect.height / 2;
-                
-                // Activate when stage is in the middle 50% of viewport
-                if (stageMiddle > windowHeight * 0.25 && stageMiddle < windowHeight * 0.75) {
-                    stage.classList.add('active');
-                } else {
-                    stage.classList.remove('active');
-                }
-            });
-        }
-
-        // Add scroll listener for incident replay
-        window.addEventListener('scroll', handleIncidentScroll);
-        window.addEventListener('load', handleIncidentScroll);
-
-        // Perspective Toggle for Incident Replay
-        const perspectiveButtons = document.querySelectorAll('.perspective-btn');
-        let currentPerspective = 'attacker';
-
-        perspectiveButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const perspective = btn.getAttribute('data-perspective');
-                
-                // Update active button
-                perspectiveButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                // Update visible content
-                currentPerspective = perspective;
-                updatePerspectiveView(perspective);
-            });
-        });
 
         function updatePerspectiveView(perspective) {
             const allContent = document.querySelectorAll('.perspective-content');
@@ -3315,7 +2703,7 @@
                 output = 'flag.txt';
             } else if (lowerCmd === 'cat flag.txt' || lowerCmd === 'cat ./flag.txt') {
                 foundFlag = true;
-                output = `<span style="color: rgba(255, 255, 255, 0.9); font-weight: bold;">success</span>`;
+                output = `<span style="color: var(--text-secondary); font-weight: bold;">success</span>`;
             } else if (lowerCmd.startsWith('cat ')) {
                 output = 'cat: ' + cmd.substring(4) + ': No such file or directory';
             } else if (lowerCmd === 'ping' || lowerCmd.startsWith('ping ')) {
