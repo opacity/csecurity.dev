@@ -54,6 +54,16 @@
             position: relative;
         }
 
+        /* Loading fade-in animation */
+        .fade-in-content {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .fade-in-content.loaded {
+            opacity: 1;
+        }
+
         body.light-mode::before {
             content: '';
             position: fixed;
@@ -1186,6 +1196,9 @@
         }
 
         /* Responsive */
+            display: none;
+        }
+
         @media (max-width: 768px) {
             .logo {
                 font-size: 2.5rem;
@@ -1440,14 +1453,14 @@
                     <h1 class="logo"><span class="typewriter" id="typewriter"></span></h1>
                     <span class="logo-cursor" id="logoCursor">_</span>
                 </div>
-                <p class="tagline">contact@csecurity.dev</p>
+                <p class="tagline fade-in-content">contact@csecurity.dev</p>
                 
-                <div class="status">
+                <div class="status fade-in-content">
                     <span class="status-dot"></span>
                     Available for Opportunities
                 </div>
 
-                <div class="tabs">
+                <div class="tabs fade-in-content">
                     <div class="tab" onclick="switchTab('skills')">Skills</div>
                     <div class="tab" onclick="switchTab('platforms')">Portfolio</div>
                     <div class="tab" onclick="switchTab('about')">About</div>
@@ -1846,6 +1859,13 @@
                     typewriterElement.textContent += typewriterText.charAt(typewriterIndex);
                     typewriterIndex++;
                     setTimeout(typeWriter, 100);
+                } else {
+                    // Fade in rest of content after typing completes
+                    setTimeout(() => {
+                        document.querySelectorAll('.fade-in-content').forEach(el => {
+                            el.classList.add('loaded');
+                        });
+                    }, 300);
                 }
             }
 
